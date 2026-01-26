@@ -1,72 +1,77 @@
-/* css/layout.css */
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SiARe — Sistema de Acompanhamento de Relatórios</title>
 
-/* GRID BASE IGUAL AO INDEX */
-html, body{ height:100%; margin:0; }
-body{
-  display:grid;
-  grid-template-columns:280px 1fr;
-  background:var(--secondary);
-  font-family:"Segoe UI", Roboto, Arial, sans-serif;
-  color:var(--text);
-}
+  <!-- Estilos -->
+  <link rel="stylesheet" href="css/layout.css" />
+</head>
 
-/* Páginas que usam o grid com <aside id="sidebar"> */
-.with-sidebar-grid{
-  display:grid;
-  grid-template-columns:280px 1fr;
-}
+<body class="with-sidebar-grid">
 
-/* Sidebar idêntica ao Index */
-aside{
-  background:var(--primary);
-  color:#fff;
-  display:flex;
-  flex-direction:column;
-  padding:1.5rem 1rem .3rem 1rem;
-}
+  <!-- ================= SIDEBAR ================= -->
+  <aside id="sidebar">
+    <h1>SiARe</h1>
+    <p class="subtitle">Sistema de Acompanhamento de Relatórios</p>
 
-/* Conteúdo principal */
-main,
-.page-main{
-  padding:2.5rem;
-  overflow:auto;
-  display:flex;
-  flex-direction:column;
-  gap:1.25rem;
-  align-items:center;
-}
+    <nav>
+      <ul>
+        <li><a href="#visao-geral">Visão geral</a></li>
+        <li><a href="#relatorios">Relatórios</a></li>
+        <li><a href="#acompanhamento">Acompanhamento</a></li>
+        <li><a href="#historico">Histórico</a></li>
+      </ul>
+    </nav>
+  </aside>
 
-/* Caixa/seção */
-.section-box,
-.version-container{
-  width:min(980px,96vw);
-}
+  <!-- ================= CONTEÚDO PRINCIPAL ================= -->
+  <main class="page-main">
 
-.section-box{
-  background:#fff;
-  border-radius:var(--radius);
-  padding:1.3rem 1.4rem;
-  border:2px solid var(--primary);
-  box-shadow:0 3px 6px rgba(0,0,0,.05);
-  text-align:left;
-}
-.section-box h2{ color:var(--primary); font-size:1.15rem; margin:0 0 .8rem; }
+    <!-- ===== TOPO / CONTEXTO ===== -->
+    <header class="version-toolbar">
+      <h2>SiARe</h2>
+      <span class="version-label">Versão inicial</span>
+    </header>
 
-/* Toolbar superior dos blocos */
-.version-toolbar{
-  background:#fff;
-  border-radius:var(--radius);
-  border:2px solid var(--primary);
-  box-shadow:0 3px 6px rgba(0,0,0,.05);
-  padding:1rem 1.2rem;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  width:min(980px,96vw);
-}
-.version-toolbar .h2-like{ color:var(--primary); font-weight:800; }
-.save-status{ margin-left:.8rem; color:var(--danger); font-weight:700; }
+    <!-- ===== VISÃO GERAL ===== -->
+    <section id="visao-geral" class="section-box">
+      <h3>Visão geral</h3>
+      <p>
+        O SiARe é um sistema voltado ao acompanhamento estruturado de relatórios,
+        permitindo registrar status, evolução, responsáveis e histórico de alterações.
+      </p>
+    </section>
 
-@media (max-width:900px){
-  .version-toolbar{ flex-direction:column; gap:.8rem; align-items:flex-start; }
-}
+    <!-- ===== RELATÓRIOS ===== -->
+    <section id="relatorios" class="section-box">
+      <h3>Relatórios</h3>
+      <p>
+        Área destinada ao cadastro e visualização dos relatórios acompanhados pelo sistema.
+      </p>
+      <p class="hint">
+        (Funcionalidade em implementação)
+      </p>
+    </section>
+
+    <!-- ===== ACOMPANHAMENTO ===== -->
+    <section id="acompanhamento" class="section-box">
+      <h3>Acompanhamento</h3>
+      <p>
+        Registro do andamento, status atual, pendências e observações associadas a cada relatório.
+      </p>
+    </section>
+
+    <!-- ===== HISTÓRICO ===== -->
+    <section id="historico" class="section-box">
+      <h3>Histórico</h3>
+      <p>
+        Consolidação das alterações, versões e registros anteriores.
+      </p>
+    </section>
+
+  </main>
+
+</body>
+</html>

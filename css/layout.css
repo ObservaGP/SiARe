@@ -1,70 +1,221 @@
-/* GRID BASE IGUAL AO INDEX */
-html, body{ height:100%; margin:0; }
-body{
-  display:grid;
-  grid-template-columns:280px 1fr;
-  background:var(--secondary);
-  font-family:"Segoe UI", Roboto, Arial, sans-serif;
-  color:var(--text);
+/* =========================================================
+   SiARe — Sistema de Acompanhamento de Relatórios
+   Layout base e identidade visual
+   ========================================================= */
+
+/* ======================
+   Identidade visual SiARe
+   ====================== */
+:root {
+  --primary: #1f6f8b;        /* Azul institucional */
+  --secondary: #f4f7fb;      /* Fundo geral */
+  --accent: #e36414;         /* Destaques */
+
+  --text: #1f2933;           /* Texto principal */
+  --muted: #6b7280;          /* Texto secundário */
+  --danger: #b00020;
+
+  --radius: 10px;
+  --shadow: 0 3px 6px rgba(0,0,0,0.08);
 }
 
-/* Páginas que usam o grid com <aside id="sidebar"> */
-.with-sidebar-grid{
-  display:grid;
-  grid-template-columns:280px 1fr;
+/* ======================
+   Reset e base
+   ====================== */
+html, body {
+  height: 100%;
+  margin: 0;
 }
 
-/* Sidebar idêntica ao Index */
-aside{
-  background:var(--primary);
-  color:#fff;
-  display:flex;
-  flex-direction:column;
-  padding:1.5rem 1rem .3rem 1rem;
+body {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  background: var(--secondary);
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
+  color: var(--text);
 }
 
-/* Conteúdo principal */
+/* ======================
+   Grid com sidebar
+   ====================== */
+.with-sidebar-grid {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+}
+
+/* ======================
+   Sidebar
+   ====================== */
+aside {
+  background: var(--primary);
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem 0.5rem;
+  box-shadow: var(--shadow);
+}
+
+aside h1 {
+  font-size: 1.3rem;
+  margin: 0 0 0.25rem;
+}
+
+aside .subtitle {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 1.2rem;
+}
+
+/* Navegação */
+aside nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+aside nav li {
+  margin-bottom: 0.3rem;
+}
+
+aside nav a {
+  color: #ffffff;
+  text-decoration: none;
+  display: block;
+  padding: 0.45rem 0.6rem;
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+}
+
+aside nav a:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+/* ======================
+   Conteúdo principal
+   ====================== */
 main,
-.page-main{
-  padding:2.5rem;
-  overflow:auto;
-  display:flex;
-  flex-direction:column;
-  gap:1.25rem;
-  align-items:center;
+.page-main {
+  padding: 2.5rem;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  align-items: center;
 }
 
-/* Caixa/seção */
+/* ======================
+   Containers
+   ====================== */
 .section-box,
-.version-container{
-  width:min(980px,96vw);
+.version-container,
+.version-toolbar {
+  width: min(980px, 96vw);
 }
 
-.section-box{
-  background:#fff;
-  border-radius:var(--radius);
-  padding:1.3rem 1.4rem;
-  border:2px solid var(--primary);
-  box-shadow:0 3px 6px rgba(0,0,0,.05);
-  text-align:left;
+/* ======================
+   Seções
+   ====================== */
+.section-box {
+  background: #ffffff;
+  border-radius: var(--radius);
+  padding: 1.3rem 1.4rem;
+  border: 2px solid var(--primary);
+  box-shadow: var(--shadow);
+  text-align: left;
 }
-.section-box h2{ color:var(--primary); font-size:1.15rem; margin:0 0 .8rem; }
 
-/* Toolbar superior dos blocos */
-.version-toolbar{
-  background:#fff;
-  border-radius:var(--radius);
-  border:2px solid var(--primary);
-  box-shadow:0 3px 6px rgba(0,0,0,.05);
-  padding:1rem 1.2rem;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  width:min(980px,96vw);
+.section-box h2,
+.section-box h3 {
+  color: var(--primary);
+  font-size: 1.15rem;
+  margin: 0 0 0.8rem;
 }
-.version-toolbar .h2-like{ color:var(--primary); font-weight:800; }
-.save-status{ margin-left:.8rem; color:var(--danger); font-weight:700; }
 
-@media (max-width:900px){
-  .version-toolbar{ flex-direction:column; gap:.8rem; align-items:flex-start; }
+.section-box p {
+  margin: 0.4rem 0;
+  line-height: 1.5;
+}
+
+.section-box .hint {
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+
+/* ======================
+   Toolbar / cabeçalho interno
+   ====================== */
+.version-toolbar {
+  background: #ffffff;
+  border-radius: var(--radius);
+  border: 2px solid var(--primary);
+  box-shadow: var(--shadow);
+  padding: 1rem 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.version-toolbar .h2-like {
+  color: var(--primary);
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+.version-toolbar .version-label {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.save-status {
+  margin-left: 0.8rem;
+  color: var(--danger);
+  font-weight: 700;
+}
+
+/* ======================
+   Estados e utilidades
+   ====================== */
+.hidden {
+  display: none !important;
+}
+
+.text-muted {
+  color: var(--muted);
+}
+
+.text-danger {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+/* ======================
+   Responsividade
+   ====================== */
+@media (max-width: 900px) {
+  body,
+  .with-sidebar-grid {
+    grid-template-columns: 1fr;
+  }
+
+  aside {
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  aside nav ul {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  main,
+  .page-main {
+    padding: 1.5rem;
+  }
+
+  .version-toolbar {
+    flex-direction: column;
+    gap: 0.8rem;
+    align-items: flex-start;
+  }
 }
