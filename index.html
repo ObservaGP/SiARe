@@ -5,70 +5,69 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SiARe — Sistema de Acompanhamento de Relatórios</title>
 
-  <!-- Estilos -->
   <link rel="stylesheet" href="css/layout.css" />
 </head>
 
 <body class="with-sidebar-grid">
 
   <!-- ================= SIDEBAR ================= -->
-  <aside id="sidebar">
-    <h1>SiARe</h1>
-    <p class="subtitle">Sistema de Acompanhamento de Relatórios</p>
+<aside>
+  <h1>SiARe</h1>
+  <p class="subtitle">Sistema de Acompanhamento de Relatórios</p>
 
-    <nav>
-      <ul>
-        <li><a href="#visao-geral">Visão geral</a></li>
-        <li><a href="#relatorios">Relatórios</a></li>
-        <li><a href="#acompanhamento">Acompanhamento</a></li>
-        <li><a href="#historico">Histórico</a></li>
-      </ul>
-    </nav>
-  </aside>
+  <nav>
+    <ul>
+      <li><a href="index.html" class="active"><strong>Visão geral</strong></a></li>
+      <li><a href="pages/relatorios.html">Relatórios</a></li>
+      <li><a href="pages/equipe.html">Equipe Executora</a></li>
+      <li><a href="pages/administrativo.html">Administrativo</a></li>
+    </ul>
+  </nav>
+</aside>
 
-  <!-- ================= CONTEÚDO PRINCIPAL ================= -->
+  <!-- ================= CONTEÚDO ================= -->
   <main class="page-main">
 
-    <!-- ===== TOPO / CONTEXTO ===== -->
+    <!-- TOPO -->
     <header class="version-toolbar">
-      <h2>SiARe</h2>
+      <div class="h2-like">SiARe</div>
       <span class="version-label">Versão inicial</span>
     </header>
 
-    <!-- ===== VISÃO GERAL ===== -->
-    <section id="visao-geral" class="section-box">
+    <!-- VISÃO GERAL -->
+    <section class="section-box">
       <h3>Visão geral</h3>
       <p>
-        O SiARe é um sistema voltado ao acompanhamento estruturado de relatórios,
-        permitindo registrar status, evolução, responsáveis e histórico de alterações.
+        O SiARe acompanha projetos de pesquisa executados pelo Polo de Inovação Vitória – Ifes,
+        com foco na Equipe Executora e nos relatórios produzidos.
       </p>
     </section>
 
-    <!-- ===== RELATÓRIOS ===== -->
-    <section id="relatorios" class="section-box">
+    <!-- DADOS DO PROJETO (CAIXA CENTRAL) -->
+    <section class="section-box" style="text-align:center;">
+      <div style="font-size:2.2rem; font-weight:800; color:var(--primary);">
+        SIGLA-DO-PROJETO
+      </div>
+      <div style="font-size:1.1rem; color:var(--muted); margin-top:.3rem;">
+        Nome completo do projeto de pesquisa
+      </div>
+    </section>
+
+    <!-- RELATÓRIOS -->
+    <section class="section-box">
       <h3>Relatórios</h3>
       <p>
-        Área destinada ao cadastro e visualização dos relatórios acompanhados pelo sistema.
-      </p>
-      <p class="hint">
-        (Funcionalidade em implementação)
+        Relatórios técnicos produzidos pela equipe executora.
       </p>
     </section>
 
-    <!-- ===== ACOMPANHAMENTO ===== -->
-    <section id="acompanhamento" class="section-box">
-      <h3>Acompanhamento</h3>
+    <!-- EQUIPE -->
+    <section class="section-box">
+      <h3>Equipe Executora</h3>
       <p>
-        Registro do andamento, status atual, pendências e observações associadas a cada relatório.
+        Cadastro, visualização e gestão dos membros da equipe executora do projeto.
       </p>
-    </section>
-
-    <!-- ===== HISTÓRICO ===== -->
-    <section id="historico" class="section-box">
-      <h3>Histórico</h3>
-      <p>
-        Consolidação das alterações, versões e registros anteriores.
-      </p>
+      <a href="pages/equipe.html">➡ Acessar Equipe Executora</a>
     </section>
 
   </main>

@@ -219,3 +219,164 @@ main,
     align-items: flex-start;
   }
 }
+/* =====================================================
+   Refinos visuais — Administrativo (final)
+   ===================================================== */
+
+/* Espaçamento entre campos de formulário */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1.1rem; /* MAIS RESPIRO ENTRE LINHAS */
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.form-group input {
+  padding: 0.45rem 0.6rem;
+  font-size: 0.95rem;
+}
+
+/* Ajuste das duas datas lado a lado */
+.two-cols {
+  margin-top: 0.4rem;
+}
+
+/* =====================================================
+   Layout Administrativo — conforme mockup
+   ===================================================== */
+
+.grid-1 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.2rem;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.4rem;
+  margin-top: 1.2rem;
+}
+
+.grid-2-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.6rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.form-group input {
+  padding: 0.45rem 0.6rem;
+  font-size: 0.95rem;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+  padding: 0.7rem 0.8rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.cell-center {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.btn-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.15);
+  background: #fff;
+  font-size: 0.85rem;
+}
+
+.btn-icon:hover {
+  background: rgba(0,0,0,0.05);
+}
+
+/* ============================
+   Equipe — layout em bloco
+   ============================ */
+
+.member-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 40px 1fr 40px;
+  align-items: center;
+  width: 100%;                 /* 🔹 FORÇA OCUPAR A CAIXA TODA */
+  padding: 1rem 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.member-name {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.member-meta {
+  font-size: 0.85rem;
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.member-actions-left {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.member-actions-right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.member-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* ======================
+   Sidebar — página ativa
+   ====================== */
+
+aside nav a.active {
+  background: rgba(255, 255, 255, 0.25);
+  font-weight: 700;
+  border-left: 4px solid #ffffff;
+  padding-left: 0.4rem; /* compensa a borda */
+}
+
+aside nav a.active:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
