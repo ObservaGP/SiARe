@@ -1,0 +1,40 @@
+cff-version: 1.2.0
+message: "Se você utilizar este software em sua pesquisa, por favor cite conforme os metadados abaixo."
+title: "StatusProj — Sistema de Visualização e Modificação de Status de Projetos"
+authors:
+  - family-names: Gianordoli
+    given-names: Victor
+    affiliation: Instituto Federal do Espírito Santo (IFES)
+    orcid: "https://orcid.org/0000-0001-5905-0641"
+  - family-names: Dias
+    given-names: Taciana de Lemos
+    affiliation: Universidade Federal do Espírito Santo (UFES)
+    orcid: "https://orcid.org/0000-0002-7172-1230"
+version: "1.0"
+date-released: 2025-10-22
+license: "CC-BY-4.0"
+keywords:
+  - HTML
+  - JavaScript
+  - Gestão de Projetos
+  - Administração Pública
+  - Dados Estruturados
+  - ObservaGP
+repository-code: "https://github.com/ObservaGP/statusproj"
+type: software
+abstract: >
+  Sistema estático em HTML, CSS e JavaScript desenvolvido para exibição e modificação de dados de projetos.
+  Permite a importação e exportação de arquivos JSON para atualização e validação de informações institucionais.
+  Desenvolvido no âmbito do Grupo de Pesquisa ObservaGP (IFES/UFES), registrado no INPI sob classificação AD04/FA03.
+preferred-citation:
+  type: software
+  title: "StatusProj — Sistema de Visualização e Modificação de Status de Projetos"
+  authors:
+    - family-names: Gianordoli
+      given-names: Victor
+    - family-names: Dias
+      given-names: Taciana de Lemos
+  year: 2025
+  version: "1.0"
+  url: "https://observagp.github.io/statusproj"
+

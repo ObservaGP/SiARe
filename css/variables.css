@@ -1,0 +1,14 @@
+:root{
+  --primary:#233D4D;
+  --secondary:#E8EEF2;
+  --accent:#2E86AB;
+  --danger:#C0392B;
+  --burgundy:#7B0D0D;
+  --positive:#1b7a3a;
+  --text:#333;
+  --light:#fff;
+  --radius:10px;
+
+  /* largura comum para toolbar + blocos */
+  --content-max:1600px;
+}
