@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 message: "Se você utilizar este software em sua pesquisa, por favor cite conforme os metadados abaixo."
-title: "StatusProj — Sistema de Visualização e Modificação de Status de Projetos"
+title: "SiARe — Sistema de Acompanhamento de Relatórios de Projetos"
 authors:
   - family-names: Gianordoli
     given-names: Victor
@@ -10,31 +10,43 @@ authors:
     given-names: Taciana de Lemos
     affiliation: Universidade Federal do Espírito Santo (UFES)
     orcid: "https://orcid.org/0000-0002-7172-1230"
-version: "1.0"
-date-released: 2025-10-22
+
+version: "0.1"
+date-released: 2026-01-27
 license: "CC-BY-4.0"
+
 keywords:
   - HTML
+  - CSS
   - JavaScript
   - Gestão de Projetos
   - Administração Pública
+  - Relatórios Técnicos
+  - Monitoramento de Projetos
   - Dados Estruturados
+  - Pesquisa Aplicada
   - ObservaGP
-repository-code: "https://github.com/ObservaGP/statusproj"
+
+repository-code: "https://github.com/ObservaGP/siare"
 type: software
+
 abstract: >
-  Sistema estático em HTML, CSS e JavaScript desenvolvido para exibição e modificação de dados de projetos.
-  Permite a importação e exportação de arquivos JSON para atualização e validação de informações institucionais.
-  Desenvolvido no âmbito do Grupo de Pesquisa ObservaGP (IFES/UFES), registrado no INPI sob classificação AD04/FA03.
+  O SiARe (Sistema de Acompanhamento de Relatórios) é um sistema estático desenvolvido em HTML, CSS e JavaScript
+  para organização, acompanhamento e validação de relatórios técnicos e administrativos de projetos de pesquisa,
+  desenvolvimento e inovação. O sistema estrutura informações de vigência, equipe executora e entregas periódicas,
+  permitindo a visualização matricial de relatórios por membro e período. O SiARe é orientado à gestão pública,
+  à pesquisa aplicada e à prestação de contas institucional, sendo desenvolvido no âmbito do Grupo de Pesquisa
+  ObservaGP (IFES/UFES).
+
 preferred-citation:
   type: software
-  title: "StatusProj — Sistema de Visualização e Modificação de Status de Projetos"
+  title: "SiARe — Sistema de Acompanhamento de Relatórios de Projetos"
   authors:
     - family-names: Gianordoli
       given-names: Victor
     - family-names: Dias
       given-names: Taciana de Lemos
-  year: 2025
-  version: "1.0"
-  url: "https://observagp.github.io/statusproj"
+  year: 2026
+  version: "0.1"
+  url: "https://observagp.github.io/siare"
 
