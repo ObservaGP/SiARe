@@ -75,43 +75,42 @@
       </div>
     </section>
 
-    <!-- ================= RELACIONAMENTOS ================= -->
-    <section class="section-box">
-      <div class="section-header">
-        <h3>Relacionamentos</h3>
-        <button class="btn-success rounded-xl">➕ Adicionar Parceiro</button>
-      </div>
+<!-- ================= RELACIONAMENTOS ================= -->
+<section class="section-box">
+  <div class="section-header">
+    <h3>Relacionamentos</h3>
+    <button class="btn-success rounded-xl">➕ Adicionar Parceiro</button>
+  </div>
 
-      <p class="text-muted">
-        Parceiros institucionais envolvidos no projeto
-      </p>
+  <p class="text-muted">
+    Parceiros institucionais envolvidos no projeto
+  </p>
 
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th style="width:60px;"></th>
-            <th>Nome do Parceiro</th>
-            <th style="width:220px;">CNPJ</th>
-            <th style="width:60px;"></th>
-          </tr>
-        </thead>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Nome do Parceiro</th>
+        <th style="width:220px;">CNPJ</th>
+        <th class="table-actions">Ações</th> <!-- 🔹 ÚLTIMA COLUNA -->
+      </tr>
+    </thead>
 
-        <tbody>
-          <tr>
-            <td class="cell-center">
-              <button class="btn-icon btn-warning">✏️</button>
-            </td>
-
-            <td>Empresa Parceira Exemplo</td>
-            <td>00.000.000/0001-00</td>
-
-            <td class="cell-center">
-              <button class="btn-icon btn-danger">🗑️</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+    <tbody>
+      <tr>
+        <td>Empresa Parceira Exemplo</td>
+        <td>00.000.000/0001-00</td>
+        
+        <!-- 🔹 AÇÕES NA ÚLTIMA COLUNA, ALINHADAS À DIREITA -->
+        <td class="cell-center table-actions">
+          <div class="actions-container">
+            <button class="btn-icon btn-warning">✏️</button>
+            <button class="btn-icon btn-danger">🗑️</button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</section>
 
     <!-- ================= CHAVE ================= -->
     <section class="section-box">

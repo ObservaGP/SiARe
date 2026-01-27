@@ -322,17 +322,31 @@ main,
 }
 
 /* ============================
-   Equipe — layout em bloco
+   Equipe — layout em bloco (ATUALIZADO)
    ============================ */
 
 .member-row {
   position: relative;
   display: grid;
-  grid-template-columns: 40px 1fr 40px;
+  grid-template-columns: 1fr auto; /* 🔹 MUDADO: conteúdo à esquerda, ações à direita */
   align-items: center;
-  width: 100%;                 /* 🔹 FORÇA OCUPAR A CAIXA TODA */
+  width: 100%;
   padding: 1rem 0;
   border-bottom: 1px solid #e5e7eb;
+  gap: 1rem; /* 🔹 Espaço entre conteúdo e ações */
+}
+
+.member-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.member-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* 🔹 Espaço entre os botões */
+  margin-right: 0.5rem; /* 🔹 Empurra os botões um pouco mais para a direita */
 }
 
 .member-name {
@@ -348,22 +362,10 @@ main,
   gap: 0.4rem;
 }
 
-.member-actions-left {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
+/* 🔹 Remover classes antigas não mais necessárias */
+.member-actions-left,
 .member-actions-right {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.member-content {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
+  display: none;
 }
 
 /* ======================
@@ -379,4 +381,20 @@ aside nav a.active {
 
 aside nav a.active:hover {
   background: rgba(255, 255, 255, 0.35);
+}
+
+/* ============================
+   Tabela com ações à direita - Relacionamentos
+   ============================ */
+
+.table-actions {
+  width: 120px;
+  text-align: center;
+}
+
+.actions-container {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end; /* 🔹 Agora alinha à direita */
+  padding-right: 1rem; /* 🔹 Mais espaço à direita */
 }
