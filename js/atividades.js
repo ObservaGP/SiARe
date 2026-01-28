@@ -52,6 +52,18 @@ document.addEventListener('DOMContentLoaded', () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }
 
+  function makeId(prefix = 'act') {
+    return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,8)}`;
+  }
+
+  function ensureActivityIds(data) {
+    let changed = false;
+    data.atividades.forEach((a) => {
+      if (!a.id) { a.id = makeId('act'); changed = true; }
+    });
+    if (changed) saveData(data);
+  }
+
   function escapeHtml(str) {
     return String(str ?? '')
       .replaceAll('&', '&amp;')
@@ -156,7 +168,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const data = getData();
-    const novo = { descricao: desc, atribuicao };
+    const existingId = (editingIndex !== null && data.atividades[editingIndex]) ? data.atividades[editingIndex].id : null;
+    const novo = { id: existingId || makeId('act'), descricao: desc, atribuicao };
 
     if (editingIndex !== null) {
       data.atividades[editingIndex] = novo;
@@ -212,6 +225,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function render() {
     const data = getData();
+    ensureActivityIds(data);
     const atividades = data.atividades;
 
     tbody.innerHTML = '';
@@ -237,6 +251,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }).join('');
 
       tr.innerHTML = `
+        <td class="col-num">${idx + 1}</td>
         <td class="col-atividade">${desc}</td>
         ${checks}
         <td class="col-acoes">

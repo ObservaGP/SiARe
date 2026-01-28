@@ -513,6 +513,19 @@ main,
 .activities-table .col-atividade {
   min-width: 320px;
 }
+.activities-table .col-num {
+  width: 56px;
+  text-align: center;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.activities-table td.col-num {
+  text-align: center;
+  color: var(--muted);
+  font-weight: 700;
+}
+
 
 .activities-table .col-check {
   width: 140px;
@@ -560,4 +573,196 @@ main,
   font-size: 0.86rem;
   color: var(--text);
   margin: 0.25rem 0;
+}
+
+
+.text-muted {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+
+/* Alias: compatibilidade com classes antigas (icon-btn) */
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  border: 1px solid rgba(31, 111, 139, 0.22);
+  background: #ffffff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.08s ease, filter 0.08s ease, box-shadow 0.08s ease;
+}
+
+.icon-btn:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.12);
+}
+
+.icon-edit { border-color: rgba(227, 100, 20, 0.35); }
+.icon-delete { border-color: rgba(239, 68, 68, 0.35); color: var(--danger); }
+
+
+/* ======================
+   Relatórios (seleção por membro/mês)
+   ====================== */
+.report-box { padding-top: 1.1rem; }
+
+.panel-scroll {
+  overflow-y: scroll; /* mostra barra sempre */
+  scrollbar-gutter: stable;
+}
+
+.members-panel {
+  max-height: 220px;
+  padding: 0.2rem 0.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.reports-member-card {
+  width: 100%;
+  text-align: left;
+  border: 1px solid rgba(31, 111, 139, 0.18);
+  border-radius: 12px;
+  background: #ffffff;
+  padding: 0.75rem 0.8rem;
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
+}
+
+.reports-member-card:hover { filter: brightness(0.99); }
+
+.reports-member-card:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.10);
+}
+
+.reports-member-card.is-selected {
+  border-color: rgba(31, 111, 139, 0.55);
+  box-shadow: 0 0 0 3px rgba(31, 111, 139, 0.12);
+  background: rgba(31, 111, 139, 0.06);
+}
+
+.reports-member-name {
+  font-weight: 900;
+  font-size: 1.02rem;
+  color: var(--text);
+}
+
+.reports-member-meta {
+  margin-top: 0.15rem;
+  font-size: 0.86rem;
+  color: var(--muted);
+  line-height: 1.25;
+}
+
+.months-panel {
+  max-height: 210px;
+  padding: 0.6rem 0.4rem;
+}
+
+.year-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.year-label {
+  font-weight: 900;
+  min-width: 56px;
+  text-align: center;
+}
+
+.months-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(120px, 1fr));
+  gap: 0.8rem;
+}
+
+.month-tile {
+  border: 1px solid rgba(31, 111, 139, 0.18);
+  border-radius: 14px;
+  background: #ffffff;
+  padding: 0.8rem 0.75rem;
+  cursor: pointer;
+  text-align: left;
+  min-height: 74px;
+  transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
+}
+
+.month-tile:hover { filter: brightness(0.99); }
+
+.month-tile:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.10);
+}
+
+.month-tile .month-year {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-weight: 800;
+}
+
+.month-tile .month-name {
+  margin-top: 0.15rem;
+  font-size: 0.92rem;
+  font-weight: 900;
+}
+
+.month-tile.is-selected {
+  border-color: rgba(31, 111, 139, 0.55);
+  background: rgba(31, 111, 139, 0.06);
+  box-shadow: 0 0 0 3px rgba(31, 111, 139, 0.12);
+}
+
+.tasks-panel {
+  max-height: 280px;
+  padding: 0.4rem 0.2rem;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.55rem 0.6rem;
+  border-top: 1px solid rgba(31, 111, 139, 0.14);
+  cursor: pointer;
+  user-select: none;
+}
+
+.task-item:first-child { border-top: 0; }
+
+.task-check {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.task-num {
+  width: 40px;
+  text-align: center;
+  font-weight: 900;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.task-text {
+  color: var(--text);
+  font-size: 0.92rem;
+}
+
+.task-item.is-checked .task-text {
+  color: #2563eb;
+}
+
+.reports-counter {
+  font-weight: 800;
+}
+
+@media (max-width: 900px) {
+  .months-grid { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
 }
