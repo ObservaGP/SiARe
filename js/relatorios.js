@@ -188,8 +188,10 @@ document.addEventListener('DOMContentLoaded', () => {
       tile.dataset.month = String(i);
 
       const nums = getMarkedNumsForMonth(data, state.memberKey, state.year, i, allIndexById);
-      const preview = nums.length
-        ? nums.slice(0, 8).join(' ') + (nums.length > 8 ? ' …' : '')
+      // preview: números das atividades marcadas (sempre 2 dígitos: 03 05 16 ...)
+      const formatted = nums.map(n => String(n).padStart(2, '0'));
+      const preview = formatted.length
+        ? formatted.slice(0, 10).join(' ') + (formatted.length > 10 ? ' …' : '')
         : '';
 
       tile.innerHTML = `
