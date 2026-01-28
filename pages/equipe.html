@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Equipe Executora — SiARe</title>
-  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="css/layout.css" />
 </head>
 
 <body class="with-sidebar-grid">
@@ -15,7 +15,7 @@
 
   <nav>
     <ul>
-      <li><a href="../index.html">Visão geral</a></li>
+      <li><a href="index.html">Visão geral</a></li>
       <li><a href="relatorios.html">Relatórios</a></li>
       <li><a href="equipe.html" class="active">Equipe Executora</a></li>
       <li><a href="administrativo.html">Administrativo</a></li>
@@ -30,7 +30,7 @@
     <div class="h2-like">Equipe Executora</div>
     <div class="version-label">Projeto: PROJETO26</div>
   </div>
-  <button class="btn-danger">🔒 Editar Equipe</button>
+  <button class="btn-danger" type="button">🔒 Editar Equipe</button>
 </header>
 
 <section class="section-box">
@@ -40,30 +40,30 @@
     <a href="equipe-form.html" class="btn-success rounded-xl">➕ Adicionar Membro</a>
   </div>
 
-  <div class="member-row">
-    <div class="member-content">
-      <div class="member-name">Fulano de Tal</div>
+  <div id="memberList" class="member-list"></div>
 
-      <div class="member-meta">
-        <span>Docente</span> · <span>Coordenador</span>
-      </div>
-
-      <div class="member-meta">
-        <strong>C.H.</strong>
-        <span>c/ bolsa: 20h</span> ·
-        <span>s/ bolsa: 10h</span> |
-        <span>01/01/2026 – 31/12/2026</span>
-      </div>
-    </div>
-
-    <div class="member-actions">
-      <button class="btn-icon btn-warning">✏️</button>
-      <button class="btn-icon btn-danger">🗑️</button>
-    </div>
+  <div id="emptyState" class="empty-state hidden">
+    Nenhum membro cadastrado ainda.
   </div>
 
 </section>
 
 </main>
+
+<script src="js/equipe.js" defer></script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    if (!window.SIARE_EQUIPE_LOADED) {
+      const box = document.createElement('div');
+      box.style.cssText =
+        'margin-top:12px;padding:10px 12px;border:2px solid #b00020;border-radius:10px;' +
+        'background:#fff;color:#b00020;font-weight:700;max-width:980px;width:min(980px,96vw);';
+      box.textContent =
+        'ERRO: equipe.js NÃO carregou. Verifique o caminho/capitalização em js/equipe.js';
+      document.querySelector('main')?.appendChild(box);
+    }
+  });
+</script>
 </body>
 </html>

@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cadastrar Membro — SiARe</title>
-  <link rel="stylesheet" href="../css/layout.css" />
+  <link rel="stylesheet" href="css/layout.css" />
 </head>
 
 <body class="with-sidebar-grid">
@@ -18,33 +18,35 @@
 
 <section class="section-box form-box">
 
-  <a href="equipe.html" class="form-close">✕</a>
+  <a href="equipe.html" class="form-close" aria-label="Fechar">✕</a>
 
-  <h3>Cadastrar Membro da Equipe</h3>
+  <h3 id="formTitle">Cadastrar Membro da Equipe</h3>
 
   <form id="equipeForm" novalidate>
 
     <!-- Nome / CPF -->
     <div class="grid-2">
       <div class="form-group">
-        <label>Nome *</label>
+        <label for="nome">Nome *</label>
         <input
+          id="nome"
+          name="nome"
           type="text"
-          class="input-example example"
-          value="Fulano de Tal"
-          data-example="Fulano de Tal"
+          placeholder="Fulano de Tal"
+          autocomplete="name"
           required
         />
       </div>
 
       <div class="form-group">
-        <label>CPF *</label>
+        <label for="cpf">CPF *</label>
         <input
+          id="cpf"
+          name="cpf"
           type="text"
-          class="input-example example"
-          value="000.000.000-00"
-          data-example="000.000.000-00"
-          pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}"
+          placeholder="000.000.000-00"
+          inputmode="numeric"
+          autocomplete="off"
           required
         />
       </div>
@@ -53,23 +55,25 @@
     <!-- Vínculo / SIAPE -->
     <div class="grid-2">
       <div class="form-group">
-        <label>Vínculo Institucional *</label>
-        <select required class="select-example">
+        <label for="vinculo">Vínculo Institucional *</label>
+        <select id="vinculo" name="vinculo" required>
           <option value="">—</option>
-          <option>Docente</option>
-          <option>Técnico-Administrativo</option>
-          <option>Discente</option>
-          <option>Externo</option>
+          <option value="Docente">Docente</option>
+          <option value="Técnico-Administrativo">Técnico-Administrativo</option>
+          <option value="Discente">Discente</option>
+          <option value="Externo">Externo</option>
         </select>
       </div>
 
       <div class="form-group">
-        <label>SIAPE *</label>
+        <label for="siape">SIAPE *</label>
         <input
+          id="siape"
+          name="siape"
           type="text"
-          class="input-example example"
-          value="000000000"
-          data-example="000000000"
+          placeholder="000000000"
+          inputmode="numeric"
+          autocomplete="off"
           maxlength="9"
           required
         />
@@ -79,22 +83,22 @@
     <!-- Cargo / Forma -->
     <div class="grid-2">
       <div class="form-group">
-        <label>Cargo/Função no Projeto *</label>
-        <select required class="select-example">
+        <label for="cargo">Cargo/Função no Projeto *</label>
+        <select id="cargo" name="cargo" required>
           <option value="">—</option>
-          <option>Coordenador</option>
-          <option>Pesquisador</option>
-          <option>Pesquisador Estudante</option>
-          <option>Pesquisador Externo</option>
+          <option value="Coordenador">Coordenador</option>
+          <option value="Pesquisador">Pesquisador</option>
+          <option value="Pesquisador Estudante">Pesquisador Estudante</option>
+          <option value="Pesquisador Externo">Pesquisador Externo</option>
         </select>
       </div>
 
       <div class="form-group">
-        <label>Forma de Vinculação *</label>
-        <select required class="select-example">
+        <label for="forma">Forma de Vinculação *</label>
+        <select id="forma" name="forma" required>
           <option value="">—</option>
-          <option>Plano de Trabalho</option>
-          <option>Edital</option>
+          <option value="Plano de Trabalho">Plano de Trabalho</option>
+          <option value="Edital">Edital</option>
         </select>
       </div>
     </div>
@@ -102,24 +106,26 @@
     <!-- Cargas Horárias -->
     <div class="grid-2">
       <div class="form-group">
-        <label>C.H. semanal com bolsa *</label>
+        <label for="chBolsa">C.H. semanal com bolsa *</label>
         <input
+          id="chBolsa"
+          name="chBolsa"
           type="text"
-          class="input-example example ch"
-          value="00"
-          data-example="00"
+          placeholder="00"
+          inputmode="numeric"
           maxlength="2"
           required
         />
       </div>
 
       <div class="form-group">
-        <label>C.H. semanal sem bolsa *</label>
+        <label for="chSemBolsa">C.H. semanal sem bolsa *</label>
         <input
+          id="chSemBolsa"
+          name="chSemBolsa"
           type="text"
-          class="input-example example ch"
-          value="00"
-          data-example="00"
+          placeholder="00"
+          inputmode="numeric"
           maxlength="2"
           required
         />
@@ -129,20 +135,20 @@
     <!-- Datas -->
     <div class="grid-2">
       <div class="form-group">
-        <label>Data de Início *</label>
-        <input type="date" class="date-field" required />
+        <label for="inicio">Data de Início *</label>
+        <input id="inicio" name="inicio" type="date" required />
       </div>
 
       <div class="form-group">
-        <label>Data de Término *</label>
-        <input type="date" class="date-field" required />
+        <label for="fim">Data de Término *</label>
+        <input id="fim" name="fim" type="date" required />
       </div>
     </div>
 
-		<div class="form-footer-info">
-		  <div>*Campos obrigatórios</div>
-		  <div id="saveInfo" class="right"></div>
-		</div>
+    <div class="form-footer-info">
+      <div>*Campos obrigatórios</div>
+      <div id="saveInfo" class="right" aria-live="polite"></div>
+    </div>
 
     <!-- Ações -->
     <div class="form-actions">
@@ -151,7 +157,7 @@
       </div>
 
       <div class="form-actions-right">
-        <button type="submit" class="btn-save">Salvar</button>
+        <button id="btnSubmit" type="submit" class="btn-save">Salvar</button>
       </div>
     </div>
 
@@ -159,9 +165,9 @@
 
 </section>
 
-<div id="confirmModal" class="modal hidden">
+<div id="confirmModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
   <div class="modal-box">
-    <p>Já existe um registro com este nome cadastrado.<br>Deseja substituí-lo?</p>
+    <p id="confirmTitle">Já existe um registro com este nome cadastrado.<br>Deseja substituí-lo?</p>
 
     <div class="modal-actions">
       <button id="btnNao" class="btn-danger">Não</button>
@@ -172,6 +178,22 @@
 
 </main>
 
-<script src="../js/equipe-form.js"></script>
+<script src="js/equipe-form.js" defer></script>
+
+<script>
+  // Detector: se o arquivo externo não carregar, você vai ver isso na hora
+  window.addEventListener('DOMContentLoaded', () => {
+    if (!window.SIARE_FORM_LOADED) {
+      const box = document.createElement('div');
+      box.style.cssText =
+        'margin-top:12px;padding:10px 12px;border:2px solid #b00020;border-radius:10px;' +
+        'background:#fff;color:#b00020;font-weight:700;max-width:980px;width:min(980px,96vw);';
+      box.textContent =
+        'ERRO: equipe-form.js NÃO carregou. Verifique o caminho/capitalização em js/equipe-form.js';
+      document.querySelector('main')?.appendChild(box);
+    }
+  });
+</script>
+
 </body>
 </html>

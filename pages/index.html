@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SiARe — Sistema de Acompanhamento de Relatórios</title>
+
+  <link rel="stylesheet" href="css/layout.css" />
+</head>
+
+<body class="with-sidebar-grid">
+
+  <!-- ================= SIDEBAR ================= -->
+<aside>
+  <h1>SiARe</h1>
+  <p class="subtitle">Sistema de Acompanhamento de Relatórios</p>
+
+  <nav>
+    <ul>
+      <li><a href="index.html" class="active"><strong>Visão geral</strong></a></li>
+      <li><a href="relatorios.html">Relatórios</a></li>
+      <li><a href="equipe.html">Equipe Executora</a></li>
+      <li><a href="administrativo.html">Administrativo</a></li>
+    </ul>
+  </nav>
+</aside>
+
+  <!-- ================= CONTEÚDO ================= -->
+  <main class="page-main">
+
+    <!-- TOPO -->
+    <header class="version-toolbar">
+      <div class="h2-like">SiARe</div>
+      <span class="version-label">Versão inicial</span>
+    </header>
+
+    <!-- VISÃO GERAL -->
+    <section class="section-box">
+      <h3>Visão geral</h3>
+      <p>
+        O SiARe acompanha projetos de pesquisa executados pelo Polo de Inovação Vitória – Ifes,
+        com foco na Equipe Executora e nos relatórios produzidos.
+      </p>
+    </section>
+
+    <!-- DADOS DO PROJETO (CAIXA CENTRAL) -->
+    <section class="section-box" style="text-align:center;">
+      <div style="font-size:2.2rem; font-weight:800; color:var(--primary);">
+        SIGLA-DO-PROJETO
+      </div>
+      <div style="font-size:1.1rem; color:var(--muted); margin-top:.3rem;">
+        Nome completo do projeto de pesquisa
+      </div>
+    </section>
+
+  <div style="margin-top:1.4rem; display:flex; gap:0.8rem; justify-content:center;">
+    <button class="btn-success" id="btnExportar">⬇ Exportar</button>
+    <label class="btn-secondary" style="cursor:pointer;">
+      ⬆ Importar
+      <input type="file" id="fileImportar" accept=".json" hidden>
+    </label>
+  </div>
+</section>
+
+    <!-- RELATÓRIOS -->
+    <section class="section-box">
+      <h3>Relatórios</h3>
+      <p>
+        Relatórios técnicos produzidos pela equipe executora.
+      </p>
+    </section>
+
+    <!-- EQUIPE -->
+    <section class="section-box">
+      <h3>Equipe Executora</h3>
+      <p>
+        Cadastro, visualização e gestão dos membros da equipe executora do projeto.
+      </p>
+      <a href="equipe.html">➡ Acessar Equipe Executora</a>
+    </section>
+
+  </main>
+
+</body>
+</html>
+<script src="js/index.js"></script>
