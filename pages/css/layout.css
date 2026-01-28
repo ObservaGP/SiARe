@@ -459,3 +459,105 @@ main,
     justify-content: flex-end;
   }
 }
+
+
+/* ======================
+   Atividades (tabela)
+   ====================== */
+.activities-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.activities-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.82rem; /* fonte menor como você pediu */
+}
+
+.activities-table thead th {
+  position: sticky;
+  top: 0;
+  background: #ffffff;
+  z-index: 1;
+}
+
+.activities-table th,
+.activities-table td {
+  padding: 0.55rem 0.6rem;
+  border-top: 1px solid rgba(31, 111, 139, 0.18);
+  vertical-align: middle;
+}
+
+.activities-table thead tr:first-child th {
+  border-top: 0;
+}
+
+.activities-table th {
+  text-align: left;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.activities-table .col-atribuicao {
+  text-align: center;
+}
+
+.activities-table thead tr:nth-child(2) th {
+  text-align: center;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.activities-table .col-atividade {
+  min-width: 320px;
+}
+
+.activities-table .col-check {
+  width: 140px;
+  text-align: center;
+}
+
+.activities-table .col-acoes {
+  width: 110px;
+  text-align: right;
+}
+
+.activity-check {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.table-actions {
+  display: inline-flex;
+  gap: 0.45rem;
+  justify-content: flex-end;
+}
+
+/* Modal ligeiramente mais largo para Atividades */
+.modal-box-wide { width: min(560px, 92vw); }
+
+.modal-title { font-weight: 800; margin: 0 0 0.2rem 0; }
+
+.activity-roles {
+  margin-top: 0.9rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid rgba(31, 111, 139, 0.18);
+}
+
+.activity-roles-title {
+  font-weight: 800;
+  font-size: 0.86rem;
+  margin-bottom: 0.5rem;
+}
+
+.checkline {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.86rem;
+  color: var(--text);
+  margin: 0.25rem 0;
+}

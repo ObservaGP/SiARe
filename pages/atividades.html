@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Atividades — SiARe</title>
+  <link rel="stylesheet" href="css/layout.css" />
+</head>
+
+<body class="with-sidebar-grid">
+
+<aside>
+  <h1>SiARe</h1>
+  <p class="subtitle">Sistema de Acompanhamento de Relatórios</p>
+
+  <nav>
+    <ul>
+      <li><a href="index.html">Visão geral</a></li>
+      <li><a href="relatorios.html">Relatórios</a></li>
+      <li><a href="equipe.html">Equipe Executora</a></li>
+      <li><a href="atividades.html" class="active">Atividades</a></li>
+      <li><a href="administrativo.html">Administrativo</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<main class="page-main">
+
+<header class="version-toolbar">
+  <div>
+    <div class="h2-like">Atividades</div>
+    <div class="version-label">Atribuição por função da equipe</div>
+  </div>
+</header>
+
+<section class="section-box">
+
+  <div class="section-header">
+    <h3>Lista de Atividades</h3>
+    <button id="btnAddAtividade" class="btn-success rounded-xl" type="button">➕ Adicionar Atividade</button>
+  </div>
+
+  <div class="activities-table-wrap">
+    <table class="activities-table" aria-label="Tabela de atividades e atribuições">
+      <thead>
+        <tr>
+          <th rowspan="2" class="col-atividade">Atividade (Descrição)</th>
+          <th colspan="4" class="col-atribuicao">Atribuição</th>
+          <th rowspan="2" class="col-acoes">Ações</th>
+        </tr>
+        <tr>
+          <th>Coordenador</th>
+          <th>Pesquisador</th>
+          <th>Pesquisador Estudante</th>
+          <th>Pesquisador Externo</th>
+        </tr>
+      </thead>
+      <tbody id="activitiesBody"></tbody>
+    </table>
+  </div>
+
+  <div id="activitiesEmpty" class="empty-state hidden">
+    Nenhuma atividade cadastrada ainda.
+  </div>
+
+</section>
+
+<!-- Modal: adicionar/editar -->
+<div id="activityModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="activityTitle">
+  <div class="modal-box modal-box-wide">
+    <p id="activityTitle" class="modal-title"></p>
+
+    <form id="activityForm">
+      <div class="form-group" style="margin-top:.6rem;">
+        <label for="atividadeDescricao">Atividade (Descrição) *</label>
+        <input id="atividadeDescricao" type="text" placeholder="Ex.: Elaborar Relatório" required />
+      </div>
+
+      <div class="activity-roles">
+        <div class="activity-roles-title">Atribuir às funções:</div>
+
+        <label class="checkline"><input type="checkbox" id="role_coordenador" /> Coordenador</label>
+        <label class="checkline"><input type="checkbox" id="role_pesquisador" /> Pesquisador</label>
+        <label class="checkline"><input type="checkbox" id="role_pesquisador_estudante" /> Pesquisador Estudante</label>
+        <label class="checkline"><input type="checkbox" id="role_pesquisador_externo" /> Pesquisador Externo</label>
+      </div>
+
+      <div class="form-footer-info" style="margin-top:.9rem;">
+        <div>*Campos obrigatórios</div>
+        <div id="activityInfo" class="right" aria-live="polite"></div>
+      </div>
+
+      <div class="modal-actions" style="justify-content:flex-end;">
+        <button id="btnActCancel" class="btn-danger" type="button">Cancelar</button>
+        <button id="btnActSave" class="btn-success" type="submit">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: confirmar exclusão -->
+<div id="deleteModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="deleteTitle">
+  <div class="modal-box">
+    <p id="deleteTitle"></p>
+
+    <div class="modal-actions">
+      <button id="btnDelNao" class="btn-danger">Não</button>
+      <button id="btnDelSim" class="btn-success">Sim</button>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<script src="js/atividades.js" defer></script>
+
+</body>
+</html>
