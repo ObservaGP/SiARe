@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const nums = getMarkedNumsForMonth(data, state.memberKey, state.year, i, allIndexById);
       // preview: números das atividades marcadas (sempre 2 dígitos: 03 05 16 ...)
       const formatted = nums.map(n => String(n).padStart(2, '0'));
-      const preview = formatted.length
+      const preview = (i === state.month && formatted.length)
         ? formatted.slice(0, 10).join(' ') + (formatted.length > 10 ? ' …' : '')
         : '';
 

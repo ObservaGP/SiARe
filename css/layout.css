@@ -680,7 +680,8 @@ main,
 
 .months-panel {
   /* maior para caber 12 meses (3 linhas) sem rolagem na maioria dos casos */
-  max-height: 320px;
+  max-height: 285px;
+  min-height: 285px;
   padding: 0.6rem 0.4rem;
 }
 
@@ -710,7 +711,7 @@ main,
   cursor: pointer;
   text-align: left;
   /* dá espaço para a linha de números das atividades marcadas */
-  min-height: 86px;
+  min-height: 74px;
   transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
 }
 
