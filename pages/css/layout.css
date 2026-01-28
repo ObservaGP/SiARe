@@ -378,6 +378,11 @@ main,
   border-color: rgba(227, 100, 20, 0.35);
 }
 
+
+.btn-danger-icon {
+  border-color: rgba(239, 68, 68, 0.35);
+  color: var(--danger);
+}
 .empty-state {
   margin-top: 0.8rem;
   color: var(--muted);

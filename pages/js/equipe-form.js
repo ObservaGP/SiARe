@@ -42,6 +42,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // Defaults: CH começa em '00' (senão o placeholder não conta como valor)
+  if (!chBolsaInput.value || chBolsaInput.value.trim() === '') chBolsaInput.value = '00';
+  if (!chSemBolsaInput.value || chSemBolsaInput.value.trim() === '') chSemBolsaInput.value = '00';
+
+
   /* =========================
      Storage
      ========================= */
@@ -111,6 +116,9 @@ document.addEventListener('DOMContentLoaded', () => {
   /* =========================
      CH — somente dígitos, 2 max; padStart só no blur/submit
      ========================= */
+  if ((chBolsaInput.value||"" ).trim()==="") chBolsaInput.value="00";
+  if ((chSemBolsaInput.value||"" ).trim()==="") chSemBolsaInput.value="00";
+
   [chBolsaInput, chSemBolsaInput].forEach((input) => {
     input.addEventListener('input', () => {
       input.value = onlyDigits(input.value).slice(0, 2);
@@ -164,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!formaSelect.value) return false;
 
     const siapeDigits = onlyDigits(siapeInput.value);
-    if (siapeDigits.length !== 9) return false;
+    if (siapeDigits.length > 0 && siapeDigits.length !== 9) return false;
 
     const ch1 = onlyDigits(chBolsaInput.value);
     const ch2 = onlyDigits(chSemBolsaInput.value);
@@ -206,6 +214,11 @@ document.addEventListener('DOMContentLoaded', () => {
     fimInput.value = m.fim || '';
 
     form.dataset.editIndex = String(idx);
+
+    const t = document.getElementById("formTitle");
+    const b = document.getElementById("btnSubmit");
+    if (t) t.textContent = "Editar Membro da Equipe";
+    if (b) b.textContent = "Atualizar";
   }
   carregarParaEdicaoSeHouver();
 
@@ -278,6 +291,10 @@ document.addEventListener('DOMContentLoaded', () => {
       mostrarInfo('', false);
       fecharModal();
       delete form.dataset.editIndex;
+      const t = document.getElementById("formTitle");
+      const b = document.getElementById("btnSubmit");
+      if (t) t.textContent = "Cadastrar Membro da Equipe";
+      if (b) b.textContent = "Salvar";
     }, 0);
   });
 

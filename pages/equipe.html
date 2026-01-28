@@ -30,7 +30,7 @@
     <div class="h2-like">Equipe Executora</div>
     <div class="version-label">Projeto: PROJETO26</div>
   </div>
-  <button class="btn-danger" type="button">🔒 Editar Equipe</button>
+  <button id="btnEditEquipe" class="btn-danger" type="button">🔒 Editar Equipe</button>
 </header>
 
 <section class="section-box">
@@ -47,6 +47,18 @@
   </div>
 
 </section>
+
+<!-- Modal: confirmar exclusão -->
+<div id="deleteModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="deleteTitle">
+  <div class="modal-box">
+    <p id="deleteTitle"></p>
+
+    <div class="modal-actions">
+      <button id="btnDelNao" class="btn-danger">Não</button>
+      <button id="btnDelSim" class="btn-success">Sim</button>
+    </div>
+  </div>
+</div>
 
 </main>
 
@@ -65,5 +77,6 @@
     }
   });
 </script>
+
 </body>
 </html>
