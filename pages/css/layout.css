@@ -647,6 +647,24 @@ main,
   background: rgba(31, 111, 139, 0.06);
 }
 
+.reports-member-line {
+  display: grid;
+  grid-template-columns: minmax(140px, 220px) 1fr auto;
+  gap: 1rem;
+  align-items: baseline;
+}
+
+.reports-member-role {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reports-member-ch {
+  white-space: nowrap;
+  text-align: right;
+}
+
 .reports-member-name {
   font-weight: 900;
   font-size: 1.02rem;
@@ -654,7 +672,7 @@ main,
 }
 
 .reports-member-meta {
-  margin-top: 0.15rem;
+  margin-top: 0;
   font-size: 0.86rem;
   color: var(--muted);
   line-height: 1.25;
@@ -711,6 +729,25 @@ main,
   margin-top: 0.15rem;
   font-size: 0.92rem;
   font-weight: 900;
+}
+
+.month-tile .month-acts {
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-weight: 800;
+  line-height: 1.15;
+  min-height: 0.9rem; /* mantém altura consistente mesmo vazio */
+  white-space: normal;
+}
+
+.month-tile .month-acts {
+  margin-top: 0.3rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: rgba(31, 41, 51, 0.70);
+  line-height: 1.25;
+  min-height: 1.0em; /* mantém altura mesmo vazio */
 }
 
 .month-tile.is-selected {

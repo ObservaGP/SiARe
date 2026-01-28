@@ -140,22 +140,46 @@ document.addEventListener('DOMContentLoaded', () => {
       card.dataset.key = key;
       card.dataset.index = String(idx);
 
+      // layout otimizado em 1 linha (quebra apenas se faltar espaço)
       card.innerHTML = `
-        <div class="reports-member-name">${escapeHtml(m.nome || '')}</div>
-        <div class="reports-member-meta">${escapeHtml(m.vinculo || '')} · ${escapeHtml(m.cargo || '')}</div>
-        <div class="reports-member-meta"><strong>C.H.</strong> c/ bolsa: ${escapeHtml(m.chBolsa || '')}h · s/ bolsa: ${escapeHtml(m.chSemBolsa || '')}h</div>
+        <div class="reports-member-line">
+          <span class="reports-member-name">${escapeHtml(m.nome || '')}</span>
+          <span class="reports-member-meta reports-member-role">${escapeHtml(m.vinculo || '')} · ${escapeHtml(m.cargo || '')}</span>
+          <span class="reports-member-meta reports-member-ch"><strong>C.H.</strong> c/ bolsa: ${escapeHtml(m.chBolsa || '')}h · s/ bolsa: ${escapeHtml(m.chSemBolsa || '')}h</span>
+        </div>
       `;
 
       membersWrap.appendChild(card);
     });
   }
 
-  function renderMonths() {
+  function getAllIndexById(data) {
+    const map = new Map();
+    data.atividades.forEach((a, idx) => map.set(a.id, idx + 1));
+    return map;
+  }
+
+  function getMarkedNumsForMonth(data, memberKey, year, month, allIndexById) {
+    if (!memberKey) return [];
+    const monthKey = `${year}-${String(month).padStart(2, '0')}`;
+    const map = data.relatorios?.[memberKey]?.[monthKey] || {};
+    const nums = Object.keys(map)
+      .filter((id) => !!map[id])
+      .map((id) => allIndexById.get(id))
+      .filter((n) => Number.isFinite(n))
+      .sort((a, b) => a - b);
+    return nums;
+  }
+
+  function renderMonths(data) {
     yearLabel.textContent = String(state.year);
 
     monthsWrap.innerHTML = '';
     const grid = document.createElement('div');
     grid.className = 'months-grid';
+
+    // numeração estável: 1..N conforme a página Atividades
+    const allIndexById = getAllIndexById(data);
 
     for (let i = 1; i <= 12; i++) {
       const tile = document.createElement('button');
@@ -163,9 +187,15 @@ document.addEventListener('DOMContentLoaded', () => {
       tile.className = 'month-tile' + (i === state.month ? ' is-selected' : '');
       tile.dataset.month = String(i);
 
+      const nums = getMarkedNumsForMonth(data, state.memberKey, state.year, i, allIndexById);
+      const preview = nums.length
+        ? nums.slice(0, 8).join(' ') + (nums.length > 8 ? ' …' : '')
+        : '';
+
       tile.innerHTML = `
         <div class="month-year">${state.year}</div>
         <div class="month-name">${MONTHS[i - 1]}</div>
+        <div class="month-acts">${escapeHtml(preview)}</div>
       `;
 
       grid.appendChild(tile);
@@ -225,8 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // numeração: baseada na posição na lista completa de atividades (1..N)
-    const allIndexById = new Map();
-    data.atividades.forEach((a, idx) => allIndexById.set(a.id, idx + 1));
+    const allIndexById = getAllIndexById(data);
 
     let done = 0;
 
@@ -278,6 +307,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setSelectionInfo(data);
 
     renderMembers(data);
+    renderMonths(data);
     renderTasks(data);
   });
 
@@ -291,7 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
     saveUIState();
     setSelectionInfo(data);
 
-    renderMonths();
+    renderMonths(data);
     renderTasks(data);
   });
 
@@ -300,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const data = getData();
     saveUIState();
     setSelectionInfo(data);
-    renderMonths();
+    renderMonths(data);
     renderTasks(data);
   });
 
@@ -309,7 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const data = getData();
     saveUIState();
     setSelectionInfo(data);
-    renderMonths();
+    renderMonths(data);
     renderTasks(data);
   });
 
@@ -335,6 +365,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // atualiza estilo e contador
     renderTasks(data);
+    // atualiza números nos meses
+    renderMonths(data);
   });
 
   // Inicialização
@@ -365,7 +397,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     renderMembers(data);
-    renderMonths();
+    renderMonths(data);
     setSelectionInfo(data);
     renderTasks(data);
   }
