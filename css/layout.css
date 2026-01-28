@@ -3,16 +3,13 @@
    Layout base e identidade visual
    ========================================================= */
 
-/* ======================
-   Identidade visual SiARe
-   ====================== */
 :root {
-  --primary: #1f6f8b;        /* Azul institucional */
-  --secondary: #f4f7fb;      /* Fundo geral */
-  --accent: #e36414;         /* Destaques */
+  --primary: #1f6f8b;
+  --secondary: #f4f7fb;
+  --accent: #e36414;
 
-  --text: #1f2933;           /* Texto principal */
-  --muted: #6b7280;          /* Texto secundário */
+  --text: #1f2933;
+  --muted: #6b7280;
   --danger: #b00020;
 
   --radius: 10px;
@@ -34,6 +31,14 @@ body {
   font-family: "Segoe UI", Roboto, Arial, sans-serif;
   color: var(--text);
 }
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* IMPORTANTÍSSIMO:
+   .hidden precisa SEMPRE vencer qualquer display definido depois */
+.hidden { display: none !important; }
 
 /* ======================
    Grid com sidebar
@@ -66,7 +71,6 @@ aside .subtitle {
   margin-bottom: 1.2rem;
 }
 
-/* Navegação */
 aside nav ul {
   list-style: none;
   padding: 0;
@@ -90,6 +94,13 @@ aside nav a:hover {
   background: rgba(255,255,255,0.15);
 }
 
+aside nav a.active {
+  background: rgba(255, 255, 255, 0.25);
+  font-weight: 700;
+  border-left: 4px solid #ffffff;
+  padding-left: 0.4rem;
+}
+
 /* ======================
    Conteúdo principal
    ====================== */
@@ -106,86 +117,212 @@ main,
 /* ======================
    Containers
    ====================== */
-.section-box,
-.version-container,
-.version-toolbar {
-  width: min(980px, 96vw);
-}
-
-/* ======================
-   Seções
-   ====================== */
 .section-box {
+  width: min(980px, 96vw);
   background: #ffffff;
   border-radius: var(--radius);
   padding: 1.3rem 1.4rem;
   border: 2px solid var(--primary);
   box-shadow: var(--shadow);
-  text-align: left;
-}
-
-.section-box h2,
-.section-box h3 {
-  color: var(--primary);
-  font-size: 1.15rem;
-  margin: 0 0 0.8rem;
-}
-
-.section-box p {
-  margin: 0.4rem 0;
-  line-height: 1.5;
-}
-
-.section-box .hint {
-  font-size: 0.9rem;
-  color: var(--muted);
 }
 
 /* ======================
-   Toolbar / cabeçalho interno
+   Grids
    ====================== */
-.version-toolbar {
-  background: #ffffff;
-  border-radius: var(--radius);
-  border: 2px solid var(--primary);
-  box-shadow: var(--shadow);
-  padding: 1rem 1.2rem;
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.6rem;
+  margin-top: 1.4rem;
+}
+
+/* ======================
+   Formulário
+   ====================== */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select {
+  padding: 0.6rem 0.7rem;
+  font-size: 0.95rem;
+  width: 100%;
+}
+
+.form-group input[type="date"] {
+  padding-right: 0.4rem;
+}
+
+.form-footer-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin: 0.3rem 0 0.6rem 0;
+}
+
+.form-footer-info .right {
+  text-align: right;
+  color: var(--text);
+}
+
+/* ======================
+   Botões (unificados)
+   ====================== */
+.btn-success,
+.btn-danger,
+.btn-save,
+.btn-clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  font-weight: 600;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
+}
+
+.btn-success,
+.btn-save {
+  background: #22c55e;
+  color: #fff;
+}
+
+.btn-danger,
+.btn-clear {
+  background: #ef4444;
+  color: #fff;
+}
+
+.btn-success:active,
+.btn-danger:active,
+.btn-save:active,
+.btn-clear:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.25);
+}
+
+/* ======================
+   Ações do formulário
+   ====================== */
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+/* ======================
+   Exemplos e validação
+   ====================== */
+.input-example.example {
+  color: #9ca3af;
+  background-color: #ffffff;
+}
+
+.input-example.valid {
+  color: #2563eb;
+}
+
+.date-field {
+  color: #9ca3af;
+}
+
+.date-field:valid {
+  color: #2563eb;
+}
+
+select {
+  background-color: #ffffff;
+  color: var(--text);
+}
+
+select.valid {
+  background-color: #ffffff;
+  color: #2563eb;
+}
+
+/* ======================
+   Fechar formulário
+   ====================== */
+.form-box {
+  position: relative;
+}
+
+.form-close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.6rem;
+  width: 26px;
+  height: 26px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-}
-
-.version-toolbar .h2-like {
-  color: var(--primary);
-  font-weight: 800;
-  font-size: 1.1rem;
-}
-
-.version-toolbar .version-label {
-  font-size: 0.85rem;
-  color: var(--muted);
-}
-
-.save-status {
-  margin-left: 0.8rem;
-  color: var(--danger);
+  justify-content: center;
+  background: #b00020;
+  color: #fff;
+  border-radius: 6px;
   font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.35);
+}
+
+.form-close:hover {
+  filter: brightness(0.95);
 }
 
 /* ======================
-   Estados e utilidades
+   MODAL (confirmar substituição)
    ====================== */
-.hidden {
-  display: none !important;
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.25);
+  display: flex;              /* (o hidden vai desligar isso) */
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
 }
 
-.text-muted {
-  color: var(--muted);
+/* redundância zerada: regra específica garante que some */
+.modal.hidden { display: none !important; }
+
+.modal-box {
+  background: #fff;
+  padding: 1.2rem 1.4rem;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  width: 360px;
 }
 
-.text-danger {
-  color: var(--danger);
-  font-weight: 600;
+.modal-box p {
+  margin: 0 0 1rem 0;
+  line-height: 1.4;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+  margin-top: 1.2rem;
+}
+
+.modal-actions .btn-danger,
+.modal-actions .btn-success {
+  min-width: 90px;
+  border-radius: 999px;     /* garante igual pros dois */
 }
 
 /* ======================
@@ -197,253 +334,7 @@ main,
     grid-template-columns: 1fr;
   }
 
-  aside {
-    flex-direction: row;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  aside nav ul {
-    display: flex;
-    gap: 0.5rem;
-  }
-
-  main,
-  .page-main {
-    padding: 1.5rem;
-  }
-
-  .version-toolbar {
-    flex-direction: column;
-    gap: 0.8rem;
-    align-items: flex-start;
+  .grid-2 {
+    grid-template-columns: 1fr;
   }
 }
-/* =====================================================
-   Refinos visuais — Administrativo (final)
-   ===================================================== */
-
-/* Espaçamento entre campos de formulário */
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  margin-bottom: 1.1rem; /* MAIS RESPIRO ENTRE LINHAS */
-}
-
-.form-group label {
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-.form-group input {
-  padding: 0.45rem 0.6rem;
-  font-size: 0.95rem;
-}
-
-/* Ajuste das duas datas lado a lado */
-.two-cols {
-  margin-top: 0.4rem;
-}
-
-/* =====================================================
-   Layout Administrativo — conforme mockup
-   ===================================================== */
-
-.grid-1 {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.2rem;
-}
-
-.grid-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.4rem;
-  margin-top: 1.2rem;
-}
-
-.grid-2-inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.8rem;
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.6rem;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-
-.form-group label {
-  font-weight: 600;
-  font-size: 0.9rem;
-}
-
-.form-group input {
-  padding: 0.45rem 0.6rem;
-  font-size: 0.95rem;
-}
-
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.data-table th,
-.data-table td {
-  padding: 0.7rem 0.8rem;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.cell-center {
-  text-align: center;
-  vertical-align: middle;
-}
-
-.btn-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 1px solid rgba(0,0,0,0.15);
-  background: #fff;
-  font-size: 0.85rem;
-}
-
-.btn-icon:hover {
-  background: rgba(0,0,0,0.05);
-}
-
-/* ============================
-   Equipe — layout em bloco (ATUALIZADO)
-   ============================ */
-
-.member-row {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1fr auto; /* 🔹 MUDADO: conteúdo à esquerda, ações à direita */
-  align-items: center;
-  width: 100%;
-  padding: 1rem 0;
-  border-bottom: 1px solid #e5e7eb;
-  gap: 1rem; /* 🔹 Espaço entre conteúdo e ações */
-}
-
-.member-content {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.member-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem; /* 🔹 Espaço entre os botões */
-  margin-right: 0.5rem; /* 🔹 Empurra os botões um pouco mais para a direita */
-}
-
-.member-name {
-  font-weight: 700;
-  font-size: 1rem;
-}
-
-.member-meta {
-  font-size: 0.85rem;
-  color: var(--muted);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
-}
-
-/* 🔹 Remover classes antigas não mais necessárias */
-.member-actions-left,
-.member-actions-right {
-  display: none;
-}
-
-/* ======================
-   Sidebar — página ativa
-   ====================== */
-
-aside nav a.active {
-  background: rgba(255, 255, 255, 0.25);
-  font-weight: 700;
-  border-left: 4px solid #ffffff;
-  padding-left: 0.4rem; /* compensa a borda */
-}
-
-aside nav a.active:hover {
-  background: rgba(255, 255, 255, 0.35);
-}
-
-/* ============================
-   Tabela com ações à direita - Relacionamentos
-   ============================ */
-
-.table-actions {
-  width: 120px;
-  text-align: center;
-}
-
-.actions-container {
-  display: flex;
-  gap: 0.5rem;
-  justify-content: flex-end; /* 🔹 Agora alinha à direita */
-  padding-right: 1rem; /* 🔹 Mais espaço à direita */
-}
-
-/* ============================
-   Relatórios — matriz mensal
-   ============================ */
-
-.reports-matrix {
-  display: grid;
-  grid-template-columns: 220px 1fr;
-  margin-top: 1rem;
-  border-top: 1px solid #e5e7eb;
-}
-
-.reports-members {
-  display: grid;
-  grid-template-rows: 44px repeat(auto-fill, 44px);
-  border-right: 1px solid #e5e7eb;
-}
-
-.reports-member,
-.reports-header-cell {
-  padding: 0.6rem 0.8rem;
-  border-bottom: 1px solid #e5e7eb;
-  font-weight: 600;
-}
-
-.reports-member {
-  font-weight: 500;
-}
-
-.reports-months-wrapper {
-  overflow-x: auto;
-}
-
-.reports-months {
-  display: grid;
-  grid-template-columns: repeat(12, 120px);
-  grid-auto-rows: 44px;
-}
-
-.reports-cell {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-bottom: 1px solid #e5e7eb;
-  border-right: 1px solid #e5e7eb;
-  font-size: 0.85rem;
-  color: var(--muted);
-}
-

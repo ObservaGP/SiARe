@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inserir / Editar Membro — SiARe</title>
+  <title>Cadastrar Membro — SiARe</title>
   <link rel="stylesheet" href="../css/layout.css" />
 </head>
 
@@ -12,101 +12,166 @@
 <aside>
   <h1>SiARe</h1>
   <p class="subtitle">Sistema de Acompanhamento de Relatórios</p>
-
-  <nav>
-    <ul>
-      <li><a href="../index.html">Visão geral</a></li>
-      <li><a href="relatorios.html">Relatórios</a></li>
-      <li><a href="equipe.html"><strong>Equipe Executora</strong></a></li>
-      <li><a href="administrativo.html">Administrativo</a></li>
-    </ul>
-  </nav>
 </aside>
 
 <main class="page-main">
 
-<section class="section-box">
-  <h3>Inserir / Editar Membro da Equipe</h3>
+<section class="section-box form-box">
 
-  <div class="grid-2">
-    <div class="form-group">
-      <label>Nome</label>
-      <input type="text">
+  <a href="equipe.html" class="form-close">✕</a>
+
+  <h3>Cadastrar Membro da Equipe</h3>
+
+  <form id="equipeForm" novalidate>
+
+    <!-- Nome / CPF -->
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Nome *</label>
+        <input
+          type="text"
+          class="input-example example"
+          value="Fulano de Tal"
+          data-example="Fulano de Tal"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label>CPF *</label>
+        <input
+          type="text"
+          class="input-example example"
+          value="000.000.000-00"
+          data-example="000.000.000-00"
+          pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}"
+          required
+        />
+      </div>
     </div>
 
-    <div class="form-group">
-      <label>CPF</label>
-      <input type="text">
-    </div>
-  </div>
+    <!-- Vínculo / SIAPE -->
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Vínculo Institucional *</label>
+        <select required class="select-example">
+          <option value="">—</option>
+          <option>Docente</option>
+          <option>Técnico-Administrativo</option>
+          <option>Discente</option>
+          <option>Externo</option>
+        </select>
+      </div>
 
-  <div class="grid-2">
-    <div class="form-group">
-      <label>Vínculo Institucional</label>
-      <select>
-        <option value="">—</option>
-        <option>Docente</option>
-        <option>Técnico-Administrativo</option>
-        <option>Discente</option>
-        <option>Externo</option>
-      </select>
-    </div>
-
-    <div class="form-group">
-      <label>SIAPE</label>
-      <input type="text">
-    </div>
-  </div>
-
-  <div class="grid-2">
-    <div class="form-group">
-      <label>Cargo/Função no Projeto</label>
-      <select>
-        <option value="">—</option>
-        <option>Coordenador</option>
-        <option>Pesquisador</option>
-        <option>Pesquisador Estudante</option>
-        <option>Pesquisador Externo</option>
-      </select>
+      <div class="form-group">
+        <label>SIAPE *</label>
+        <input
+          type="text"
+          class="input-example example"
+          value="000000000"
+          data-example="000000000"
+          maxlength="9"
+          required
+        />
+      </div>
     </div>
 
-    <div class="form-group">
-      <label>Forma de Vinculação</label>
-      <input type="text">
-    </div>
-  </div>
+    <!-- Cargo / Forma -->
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Cargo/Função no Projeto *</label>
+        <select required class="select-example">
+          <option value="">—</option>
+          <option>Coordenador</option>
+          <option>Pesquisador</option>
+          <option>Pesquisador Estudante</option>
+          <option>Pesquisador Externo</option>
+        </select>
+      </div>
 
-  <div class="grid-2">
-    <div class="form-group">
-      <label>C.H. semanal com bolsa</label>
-      <input type="number">
+      <div class="form-group">
+        <label>Forma de Vinculação *</label>
+        <select required class="select-example">
+          <option value="">—</option>
+          <option>Plano de Trabalho</option>
+          <option>Edital</option>
+        </select>
+      </div>
     </div>
 
-    <div class="form-group">
-      <label>C.H. semanal sem bolsa</label>
-      <input type="number">
-    </div>
-  </div>
+    <!-- Cargas Horárias -->
+    <div class="grid-2">
+      <div class="form-group">
+        <label>C.H. semanal com bolsa *</label>
+        <input
+          type="text"
+          class="input-example example ch"
+          value="00"
+          data-example="00"
+          maxlength="2"
+          required
+        />
+      </div>
 
-  <div class="grid-2">
-    <div class="form-group">
-      <label>Data de Início</label>
-      <input type="date">
+      <div class="form-group">
+        <label>C.H. semanal sem bolsa *</label>
+        <input
+          type="text"
+          class="input-example example ch"
+          value="00"
+          data-example="00"
+          maxlength="2"
+          required
+        />
+      </div>
     </div>
 
-    <div class="form-group">
-      <label>Data de Término</label>
-      <input type="date">
-    </div>
-  </div>
+    <!-- Datas -->
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Data de Início *</label>
+        <input type="date" class="date-field" required />
+      </div>
 
-  <div class="section-header">
-    <button class="btn-success">Salvar</button>
-    <a href="equipe.html" class="btn-danger">Cancelar</a>
-  </div>
+      <div class="form-group">
+        <label>Data de Término *</label>
+        <input type="date" class="date-field" required />
+      </div>
+    </div>
+
+		<div class="form-footer-info">
+		  <div>*Campos obrigatórios</div>
+		  <div id="saveInfo" class="right"></div>
+		</div>
+
+    <!-- Ações -->
+    <div class="form-actions">
+      <div class="form-actions-left">
+        <button type="reset" class="btn-clear">Limpar</button>
+      </div>
+
+      <div class="form-actions-right">
+        <button type="submit" class="btn-save">Salvar</button>
+      </div>
+    </div>
+
+  </form>
 
 </section>
 
+<div id="confirmModal" class="modal hidden">
+  <div class="modal-box">
+    <p>Já existe um registro com este nome cadastrado.<br>Deseja substituí-lo?</p>
+
+    <div class="modal-actions">
+      <button id="btnNao" class="btn-danger">Não</button>
+      <button id="btnSim" class="btn-success">Sim</button>
+    </div>
+  </div>
+</div>
+
 </main>
+
+<script src="../js/equipe-form.js"></script>
 </body>
 </html>
