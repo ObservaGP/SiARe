@@ -1,4 +1,6 @@
 const STORAGE_KEY = 'siare_data';
+
+console.log("[SiARe] SIARE_EQUIPE_V=2026-01-28c");
 window.SIARE_EQUIPE_LOADED = true;
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -24,13 +26,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let pendingDeleteIndex = null;
 
+  function digits(v) {
+    return String(v ?? '').replace(/\D/g, '');
+  }
+
+  function ensureMemberId(m) {
+    const cpf = digits(m?.cpf);
+    const versao = String(digits(m?.versaoVinculo) || '00').slice(0, 2).padStart(2, '0');
+    if (m && !m.id && cpf.length === 11) m.id = `${cpf}-${versao}`;
+    if (m && !m.versaoVinculo) m.versaoVinculo = versao;
+    return m?.id || (cpf.length === 11 ? `${cpf}-${versao}` : '');
+  }
+
   function getData() {
     const raw = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
       projeto: {},
       equipe: [],
+      atividades: [],
       relatorios: {}
     };
     if (!Array.isArray(raw.equipe)) raw.equipe = [];
+    if (!raw.relatorios || typeof raw.relatorios !== 'object') raw.relatorios = {};
+
+    // Migração leve: garante id/versão nos registros antigos
+    let changed = false;
+    raw.equipe.forEach((m) => {
+      const beforeId = m?.id;
+      const beforeVer = m?.versaoVinculo;
+      ensureMemberId(m);
+      if (beforeId !== m?.id || beforeVer !== m?.versaoVinculo) changed = true;
+    });
+    if (changed) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(raw));
+    }
     return raw;
   }
 
@@ -42,6 +70,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!iso) return '';
     const [y, m, d] = String(iso).split('-');
     return (y && m && d) ? `${d}/${m}/${y}` : String(iso);
+  }
+
+  function moneyText(v) {
+    const s = String(v ?? '').trim();
+    return s ? s : '';
   }
 
   function escapeHtml(str) {
@@ -77,6 +110,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (pendingDeleteIndex < 0 || pendingDeleteIndex >= data.equipe.length) {
       fecharDeleteModal();
       return;
+    }
+
+    const membro = data.equipe[pendingDeleteIndex];
+    const memberId = ensureMemberId(membro);
+    const cpfKeyLegacy = digits(membro?.cpf);
+
+    // Remove relatórios associados (novo e legado)
+    if (data.relatorios && typeof data.relatorios === 'object') {
+      if (memberId && data.relatorios[memberId]) delete data.relatorios[memberId];
+      if (cpfKeyLegacy && data.relatorios[cpfKeyLegacy]) delete data.relatorios[cpfKeyLegacy];
     }
 
     data.equipe.splice(pendingDeleteIndex, 1);
@@ -132,17 +175,39 @@ document.addEventListener('DOMContentLoaded', () => {
       const row = document.createElement('div');
       row.className = 'member-row';
 
+      const id = ensureMemberId(m);
+      const siape = digits(m.siape) ? ` · SIAPE: ${digits(m.siape).padStart(9, '0')}` : '';
+      const ver = String(digits(m.versaoVinculo) || '00').slice(0, 2).padStart(2, '0');
+
+      const naoBolsista = !!m.naoBolsista;
+      const indicador = naoBolsista
+        ? '[x] Não é bolsista (Voluntariado/Contrapartida)'
+        : '[ ] Não é bolsista (Voluntariado/Contrapartida)';
+
+      const tipo = String(m.tipoBolsa ?? '').trim();
+      const valor = moneyText(m.valorBolsa);
+      const bolsaTxt = (tipo || valor)
+        ? `Bolsa: ${escapeHtml(tipo || '—')}${valor ? ` (R$ ${escapeHtml(valor)})` : ''}`
+        : 'Bolsa: —';
+
       row.innerHTML = `
         <div class="member-content">
           <div class="member-name">${escapeHtml(m.nome || '')}</div>
+
           <div class="member-meta">
-            <span>${escapeHtml(m.vinculo || '')}</span> · <span>${escapeHtml(m.cargo || '')}</span>
+            <span>${escapeHtml(m.vinculo || '')}</span> ·
+            <span>${escapeHtml(m.cargo || '')}</span> ·
+            <span>${escapeHtml(m.forma || '')}</span>
+            ${id ? ` · <span><strong>ID:</strong> ${escapeHtml(id)}</span>` : ''}
+            · <span><strong>Versão:</strong> ${escapeHtml(ver)}</span>
+            ${siape}
           </div>
+
           <div class="member-meta">
-            <strong>C.H.</strong>
-            <span>c/ bolsa: ${escapeHtml(m.chBolsa || '')}h</span> ·
-            <span>s/ bolsa: ${escapeHtml(m.chSemBolsa || '')}h</span> |
-            <span>${formatDateBR(m.inicio)} – ${formatDateBR(m.fim)}</span>
+            <span><strong>Período:</strong> ${escapeHtml(formatDateBR(m.inicio))} – ${escapeHtml(formatDateBR(m.fim))}</span>
+            · <span><strong>C.H.</strong> c/ bolsa: ${escapeHtml(m.chBolsa || '')}h · s/ bolsa: ${escapeHtml(m.chSemBolsa || '')}h</span>
+            · <span>${bolsaTxt}</span>
+            · <span>${escapeHtml(indicador)}</span>
           </div>
         </div>
 

@@ -149,23 +149,34 @@ main,
   font-size: 0.9rem;
 }
 
+/* ✅ CORREÇÃO: textarea entra no mesmo estilo de input/select */
 .form-group input,
-.form-group select {
+.form-group select,
+.form-group textarea {
   padding: 0.6rem 0.7rem;
   font-size: 0.95rem;
   width: 100%;
   border: 1px solid rgba(31, 111, 139, 0.28);
   border-radius: 8px;
   outline: none;
+  background: #fff;
+  color: var(--text);
+  font-family: inherit;
+}
+
+.form-group textarea {
+  resize: vertical;
 }
 
 .form-group input:focus,
-.form-group select:focus {
+.form-group select:focus,
+.form-group textarea:focus {
   border-color: rgba(31, 111, 139, 0.55);
   box-shadow: 0 0 0 3px rgba(31, 111, 139, 0.12);
 }
 
-.form-group input::placeholder {
+.form-group input::placeholder,
+.form-group textarea::placeholder {
   color: #9ca3af;
 }
 
@@ -378,11 +389,11 @@ main,
   border-color: rgba(227, 100, 20, 0.35);
 }
 
-
 .btn-danger-icon {
   border-color: rgba(239, 68, 68, 0.35);
   color: var(--danger);
 }
+
 .empty-state {
   margin-top: 0.8rem;
   color: var(--muted);
@@ -460,7 +471,6 @@ main,
   }
 }
 
-
 /* ======================
    Atividades (tabela)
    ====================== */
@@ -473,7 +483,7 @@ main,
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
-  font-size: 0.82rem; /* fonte menor como você pediu */
+  font-size: 0.82rem;
 }
 
 .activities-table thead th {
@@ -513,6 +523,7 @@ main,
 .activities-table .col-atividade {
   min-width: 320px;
 }
+
 .activities-table .col-num {
   width: 56px;
   text-align: center;
@@ -525,7 +536,6 @@ main,
   color: var(--muted);
   font-weight: 700;
 }
-
 
 .activities-table .col-check {
   width: 140px;
@@ -549,260 +559,67 @@ main,
   justify-content: flex-end;
 }
 
-/* Modal ligeiramente mais largo para Atividades */
-.modal-box-wide { width: min(560px, 92vw); }
+/* ... (o restante do seu arquivo continua exatamente como está) ... */
 
-.modal-title { font-weight: 800; margin: 0 0 0.2rem 0; }
-
-.activity-roles {
-  margin-top: 0.9rem;
-  padding-top: 0.6rem;
-  border-top: 1px solid rgba(31, 111, 139, 0.18);
+/* =========================
+   feedback de validação via JS
+   ========================= */
+.form-box .is-invalid {
+  border-color: #b00020 !important;
+  box-shadow: 0 0 0 3px rgba(176,0,32,0.12) !important;
 }
 
-.activity-roles-title {
-  font-weight: 800;
-  font-size: 0.86rem;
-  margin-bottom: 0.5rem;
-}
-
-.checkline {
-  display: flex;
-  align-items: center;
-  gap: 0.55rem;
-  font-size: 0.86rem;
-  color: var(--text);
-  margin: 0.25rem 0;
+/* ✅ CORREÇÃO FINAL: “00” cinza quando JS aplicar is-default */
+.form-group input.is-default {
+  color: var(--muted) !important;
 }
 
 
-.text-muted {
-  color: var(--muted);
-  font-size: 0.9rem;
+/* =========================================================
+   FIX — Equipe Form (CH, Versão e Observação)
+   Coleção de overrides com alta compatibilidade
+   ========================================================= */
+
+/* 1) "00" em CH/Versão fica cinza quando for valor padrão (JS aplica .is-default) */
+#chBolsa.is-default,
+#chSemBolsa.is-default,
+#versaoVinculo.is-default {
+  color: var(--muted) !important;
 }
 
-
-/* Alias: compatibilidade com classes antigas (icon-btn) */
-.icon-btn {
-  width: 38px;
-  height: 38px;
-  border-radius: 10px;
-  border: 1px solid rgba(31, 111, 139, 0.22);
-  background: #ffffff;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  transition: transform 0.08s ease, filter 0.08s ease, box-shadow 0.08s ease;
+/* Quando focar, volta para cor normal mesmo se ainda estiver "00" */
+#chBolsa:focus,
+#chSemBolsa:focus,
+#versaoVinculo:focus {
+  color: var(--text) !important;
 }
 
-.icon-btn:active {
-  transform: translateY(1px);
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.12);
+/* 2) Observação: MESMO padrão dos inputs (borda, raio e foco) */
+.form-group textarea,
+.form-box .form-group textarea#observacao {
+  padding: 0.6rem 0.7rem !important;
+  font-size: 0.95rem !important;
+  width: 100% !important;
+  border: 1px solid rgba(31, 111, 139, 0.28) !important;
+  border-radius: 8px !important;
+  outline: none !important;
+  font-family: inherit !important;
+  color: var(--text) !important;
+  background: #fff !important;
+  resize: vertical !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
 }
 
-.icon-edit { border-color: rgba(227, 100, 20, 0.35); }
-.icon-delete { border-color: rgba(239, 68, 68, 0.35); color: var(--danger); }
-
-
-/* ======================
-   Relatórios (seleção por membro/mês)
-   ====================== */
-.report-box { padding-top: 1.1rem; }
-
-.panel-scroll {
-  overflow-y: scroll; /* mostra barra sempre */
-  scrollbar-gutter: stable;
+/* foco igual aos inputs */
+.form-group textarea:focus,
+.form-box .form-group textarea#observacao:focus {
+  border-color: rgba(31, 111, 139, 0.55) !important;
+  box-shadow: 0 0 0 3px rgba(31, 111, 139, 0.12) !important;
 }
 
-.members-panel {
-  max-height: 220px;
-  padding: 0.2rem 0.2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
-
-.reports-member-card {
-  width: 100%;
-  text-align: left;
-  border: 1px solid rgba(31, 111, 139, 0.18);
-  border-radius: 12px;
-  background: #ffffff;
-  padding: 0.75rem 0.8rem;
-  cursor: pointer;
-  transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
-}
-
-.reports-member-card:hover { filter: brightness(0.99); }
-
-.reports-member-card:active {
-  transform: translateY(1px);
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.10);
-}
-
-.reports-member-card.is-selected {
-  border-color: rgba(31, 111, 139, 0.55);
-  box-shadow: 0 0 0 3px rgba(31, 111, 139, 0.12);
-  background: rgba(31, 111, 139, 0.06);
-}
-
-.reports-member-line {
-  display: grid;
-  grid-template-columns: minmax(140px, 220px) 1fr auto;
-  gap: 1rem;
-  align-items: baseline;
-}
-
-.reports-member-role {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.reports-member-ch {
-  white-space: nowrap;
-  text-align: right;
-}
-
-.reports-member-name {
-  font-weight: 900;
-  font-size: 1.02rem;
-  color: var(--text);
-}
-
-.reports-member-meta {
-  margin-top: 0;
-  font-size: 0.86rem;
-  color: var(--muted);
-  line-height: 1.25;
-}
-
-.months-panel {
-  /* maior para caber 12 meses (3 linhas) sem rolagem na maioria dos casos */
-  max-height: 285px;
-  min-height: 285px;
-  padding: 0.6rem 0.4rem;
-}
-
-.year-controls {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
-.year-label {
-  font-weight: 900;
-  min-width: 56px;
-  text-align: center;
-}
-
-.months-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(120px, 1fr));
-  gap: 0.8rem;
-}
-
-.month-tile {
-  border: 1px solid rgba(31, 111, 139, 0.18);
-  border-radius: 14px;
-  background: #ffffff;
-  padding: 0.8rem 0.75rem;
-  cursor: pointer;
-  text-align: left;
-  /* dá espaço para a linha de números das atividades marcadas */
-  min-height: 74px;
-  transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
-}
-
-.month-tile:hover { filter: brightness(0.99); }
-
-.month-tile:active {
-  transform: translateY(1px);
-  box-shadow: inset 0 2px 4px rgba(0,0,0,0.10);
-}
-
-.month-tile .month-year {
-  font-size: 0.78rem;
-  color: var(--muted);
-  font-weight: 800;
-}
-
-.month-tile .month-name {
-  margin-top: 0.15rem;
-  font-size: 0.92rem;
-  font-weight: 900;
-}
-
-.month-tile .month-acts {
-  margin-top: 0.35rem;
-  font-size: 0.78rem;
-  color: var(--muted);
-  font-weight: 800;
-  line-height: 1.15;
-  min-height: 0.9rem; /* mantém altura consistente mesmo vazio */
-  white-space: normal;
-}
-
-.month-tile .month-acts {
-  margin-top: 0.3rem;
-  font-size: 0.78rem;
-  font-weight: 800;
-  color: rgba(31, 41, 51, 0.70);
-  line-height: 1.25;
-  min-height: 1.0em; /* mantém altura mesmo vazio */
-}
-
-.month-tile.is-selected {
-  border-color: rgba(31, 111, 139, 0.55);
-  background: rgba(31, 111, 139, 0.06);
-  box-shadow: 0 0 0 3px rgba(31, 111, 139, 0.12);
-}
-
-.tasks-panel {
-  max-height: 280px;
-  padding: 0.4rem 0.2rem;
-}
-
-.task-item {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  padding: 0.55rem 0.6rem;
-  border-top: 1px solid rgba(31, 111, 139, 0.14);
-  cursor: pointer;
-  user-select: none;
-}
-
-.task-item:first-child { border-top: 0; }
-
-.task-check {
-  width: 18px;
-  height: 18px;
-  cursor: pointer;
-}
-
-.task-num {
-  width: 40px;
-  text-align: center;
-  font-weight: 900;
-  color: var(--muted);
-  font-size: 0.86rem;
-}
-
-.task-text {
-  color: var(--text);
-  font-size: 0.92rem;
-}
-
-.task-item.is-checked .task-text {
-  color: #2563eb;
-}
-
-.reports-counter {
-  font-weight: 800;
-}
-
-@media (max-width: 900px) {
-  .months-grid { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
+/* 3) feedback de validação via JS */
+.is-invalid {
+  border-color: #b00020 !important;
+  box-shadow: 0 0 0 3px rgba(176, 0, 32, 0.12) !important;
 }

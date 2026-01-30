@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cadastrar Membro — SiARe</title>
-  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
 </head>
 
 <body class="with-sidebar-grid">
@@ -22,7 +22,8 @@
 
   <h3 id="formTitle">Cadastrar Membro da Equipe</h3>
 
-  <form id="equipeForm" novalidate>
+  <!-- 🔒 autocomplete OFF é ESSENCIAL -->
+  <form id="equipeForm" novalidate autocomplete="off">
 
     <!-- Nome / CPF -->
     <div class="grid-2">
@@ -110,9 +111,10 @@
           id="chBolsa"
           name="chBolsa"
           type="text"
-          value="00" placeholder="00"
+          placeholder="00"
           inputmode="numeric"
           maxlength="2"
+          autocomplete="off"
           required
         />
       </div>
@@ -123,9 +125,10 @@
           id="chSemBolsa"
           name="chSemBolsa"
           type="text"
-          value="00" placeholder="00"
+          placeholder="00"
           inputmode="numeric"
           maxlength="2"
+          autocomplete="off"
           required
         />
       </div>
@@ -141,6 +144,63 @@
       <div class="form-group">
         <label for="fim">Data de Término *</label>
         <input id="fim" name="fim" type="date" required />
+      </div>
+    </div>
+
+    <!-- Vínculo/Código / Valor -->
+    <div class="grid-2">
+      <div class="form-group">
+        <label for="tipoVinculo">Vínculo/Código *</label>
+        <input
+          id="tipoVinculo"
+          name="tipoVinculo"
+          type="text"
+          placeholder="Ex.: PEQ-A, Voluntário, Contrapartida"
+          autocomplete="off"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="valorBolsa">Valor de Bolsa</label>
+        <input
+          id="valorBolsa"
+          name="valorBolsa"
+          type="text"
+          placeholder="Ex.: 700,00"
+          inputmode="decimal"
+          autocomplete="off"
+        />
+      </div>
+    </div>
+
+    <!-- Versão / Observação -->
+    <div class="grid-2">
+      <div class="form-group">
+        <label for="versaoVinculo">Versão do Vínculo *</label>
+        <input
+          id="versaoVinculo"
+          name="versaoVinculo"
+          type="text"
+          placeholder="00"
+          inputmode="numeric"
+          maxlength="2"
+          autocomplete="off"
+          required
+        />
+        <div class="text-muted small">
+          Use 2 dígitos (00, 01, 02...). A ID é CPF(dígitos)-Versão.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="observacao">Observação</label>
+        <textarea
+          id="observacao"
+          name="observacao"
+          rows="3"
+          placeholder="Anotações sobre o vínculo (opcional)"
+        ></textarea>
       </div>
     </div>
 
@@ -166,7 +226,10 @@
 
 <div id="confirmModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
   <div class="modal-box">
-    <p id="confirmTitle">Já existe um registro com este nome cadastrado.<br>Deseja substituí-lo?</p>
+    <p id="confirmTitle">
+      Já existe um registro com esta <strong>ID (CPF+Versão)</strong> cadastrado.<br>
+      Deseja substituí-lo?
+    </p>
 
     <div class="modal-actions">
       <button id="btnNao" class="btn-danger">Não</button>
@@ -177,10 +240,9 @@
 
 </main>
 
-<script src="js/equipe-form.js" defer></script>
+
 
 <script>
-  // Detector: se o arquivo externo não carregar, você vai ver isso na hora
   window.addEventListener('DOMContentLoaded', () => {
     if (!window.SIARE_FORM_LOADED) {
       const box = document.createElement('div');
@@ -193,6 +255,7 @@
     }
   });
 </script>
-
+<script src="../js/sidebar.js"></script>
+<script src="../js/equipe-form.js" defer></script>
 </body>
 </html>

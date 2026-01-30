@@ -3,26 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Relatórios — SiARe</title>
-  <link rel="stylesheet" href="css/layout.css" />
+  <title>Equipe Executora — SiARe</title>
+  <link rel="stylesheet" href="../css/layout.css" />
 </head>
 
-<body class="with-sidebar-grid">
+<body class="with-sidebar-grid" data-page="relatorios">
 
-<aside>
-  <h1>SiARe</h1>
-  <p class="subtitle">Sistema de Acompanhamento de Relatórios</p>
-
-  <nav>
-    <ul>
-      <li><a href="index.html">Visão geral</a></li>
-      <li><a href="relatorios.html" class="active">Relatórios</a></li>
-      <li><a href="equipe.html">Equipe Executora</a></li>
-      <li><a href="atividades.html">Atividades</a></li>
-      <li><a href="administrativo.html">Administrativo</a></li>
-    </ul>
-  </nav>
-</aside>
+<aside id="sidebar"></aside>
 
 <main class="page-main">
 
@@ -81,8 +68,22 @@
   </div>
 </section>
 
-</main>
+<!-- 4) PAINEL -->
+<section class="section-box report-box">
+  <div class="section-header">
+    <div>
+      <h3>Painel</h3>
+      <div class="text-muted">Mapa de preenchimento por membro e mês (ano selecionado).</div>
+    </div>
+  </div>
 
-<script src="js/relatorios.js" defer></script>
+  <div id="reportsDashboardWrap" class="dashboard-wrap" aria-label="Painel de preenchimento">
+    <table id="reportsDashboard" class="dashboard-table"></table>
+  </div>
+</section>
+
+</main>
+<script src="../js/sidebar.js"></script>
+<script src="../js/relatorios.js" defer></script>
 </body>
 </html>

@@ -4,25 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Equipe Executora — SiARe</title>
-  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="../css/layout.css" />
 </head>
 
-<body class="with-sidebar-grid">
+<body class="with-sidebar-grid" data-page="equipe">
 
-<aside>
-  <h1>SiARe</h1>
-  <p class="subtitle">Sistema de Acompanhamento de Relatórios</p>
-
-  <nav>
-    <ul>
-      <li><a href="index.html">Visão geral</a></li>
-      <li><a href="relatorios.html">Relatórios</a></li>
-      <li><a href="equipe.html" class="active">Equipe Executora</a></li>
-      <li><a href="atividades.html">Atividades</a></li>
-      <li><a href="administrativo.html">Administrativo</a></li>
-    </ul>
-  </nav>
-</aside>
+<aside id="sidebar"></aside>
 
 <main class="page-main">
 
@@ -63,7 +50,6 @@
 
 </main>
 
-<script src="js/equipe.js" defer></script>
 
 <script>
   window.addEventListener('DOMContentLoaded', () => {
@@ -78,6 +64,7 @@
     }
   });
 </script>
-
+<script src="../js/sidebar.js"></script>
+<script src="../js/equipe.js" defer></script>
 </body>
 </html>
