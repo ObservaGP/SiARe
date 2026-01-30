@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Equipe Executora — SiARe</title>
+  <link rel="stylesheet" href="css/layout.css" />
+</head>
+
+<body class="with-sidebar-grid">
+
+<aside>
+  <h1>SiARe</h1>
+  <p class="subtitle">Sistema de Acompanhamento de Relatórios</p>
+
+  <nav>
+    <ul>
+      <li><a href="index.html">Visão geral</a></li>
+      <li><a href="relatorios.html">Relatórios</a></li>
+      <li><a href="equipe.html" class="active">Equipe Executora</a></li>
+      <li><a href="atividades.html">Atividades</a></li>
+      <li><a href="administrativo.html">Administrativo</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<main class="page-main">
+
+<header class="version-toolbar">
+  <div>
+    <div class="h2-like">Equipe Executora</div>
+    <div class="version-label">Projeto: PROJETO26</div>
+  </div>
+  <button id="btnEditEquipe" class="btn-danger" type="button">🔒 Editar Equipe</button>
+</header>
+
+<section class="section-box">
+
+  <div class="section-header">
+    <h3>Membros da Equipe</h3>
+    <a href="equipe-form.html" class="btn-success rounded-xl">➕ Adicionar Membro</a>
+  </div>
+
+  <div id="memberList" class="member-list"></div>
+
+  <div id="emptyState" class="empty-state hidden">
+    Nenhum membro cadastrado ainda.
+  </div>
+
+</section>
+
+<!-- Modal: confirmar exclusão -->
+<div id="deleteModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="deleteTitle">
+  <div class="modal-box">
+    <p id="deleteTitle"></p>
+
+    <div class="modal-actions">
+      <button id="btnDelNao" class="btn-danger">Não</button>
+      <button id="btnDelSim" class="btn-success">Sim</button>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<script src="js/equipe.js" defer></script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    if (!window.SIARE_EQUIPE_LOADED) {
+      const box = document.createElement('div');
+      box.style.cssText =
+        'margin-top:12px;padding:10px 12px;border:2px solid #b00020;border-radius:10px;' +
+        'background:#fff;color:#b00020;font-weight:700;max-width:980px;width:min(980px,96vw);';
+      box.textContent =
+        'ERRO: equipe.js NÃO carregou. Verifique o caminho/capitalização em js/equipe.js';
+      document.querySelector('main')?.appendChild(box);
+    }
+  });
+</script>
+
+</body>
+</html>
