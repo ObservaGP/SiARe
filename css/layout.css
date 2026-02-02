@@ -309,6 +309,32 @@ main,
   flex-direction: column;
 }
 
+/* Cabeçalho da lista (coluna “Ativar”) */
+.member-list-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1.2rem;
+  padding: 0.25rem 0.6rem 0.55rem;
+  color: var(--muted);
+  font-weight: 900;
+  font-size: 0.82rem;
+}
+
+.member-activate-head,
+.member-activate{
+  width: 74px; /* mantém alinhado com os checkboxes */
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex: 0 0 auto;
+}
+
+.member-activate input[type="checkbox"]{
+  width: 18px;
+  height: 18px;
+}
+
 .member-row {
   display: flex;
   align-items: center;
@@ -316,6 +342,10 @@ main,
   gap: 1.2rem;
   padding: 0.9rem 0.6rem;
   border-top: 1px solid rgba(31, 111, 139, 0.18);
+}
+
+.member-row.is-inactive{
+  opacity: 0.55;
 }
 
 .member-row:first-child {
@@ -1105,8 +1135,22 @@ main,
 .year-pill {
   padding: 0.35rem 0.85rem;
   border: 1px solid rgba(31, 111, 139, 0.22);
-  border-radius: 999px;
+  /* menos “pílula”, mais retangular, ainda com cantos arredondados */
+  border-radius: 10px;
   background: rgba(31, 111, 139, 0.06);
+}
+
+/* Destaque do membro selecionado (aba Relatórios -> bloco “Mês”) */
+.member-selected-pill{
+  display:inline-flex;
+  align-items:center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid rgba(227, 100, 20, 0.35);
+  border-radius: 10px;
+  background: rgba(227, 100, 20, 0.08);
+  color: var(--text);
+  font-weight: 900;
 }
 
 /* O chip de seleção não deve empurrar layout */
@@ -1130,21 +1174,13 @@ main,
 /* ======================
    Painel de Atividades (meses + nomes)
    ====================== */
-/* Antes estava fixo (min/max 560px). Agora começa “ajustado” e cresce conforme
-   os quadrinhos aumentam (sem rolagem interna). */
-.months-panel-taller{
-  height: auto;
-  max-height: none;
-  min-height: 320px;      /* base confortável; cresce conforme necessário */
+/* Painel de Atividades — AutoGrowth */
+.months-panel-autogrow{
   padding: 0.85rem 0.4rem;
-  overflow: visible;      /* deixa o container crescer com o conteúdo */
+  overflow: visible;     /* sem scroll forçado */
+  max-height: none;      /* libera crescimento */
+  min-height: unset;     /* remove altura mínima fixa */
 }
-
-/* Sobrescreve o comportamento de .panel-scroll (que forçava scroll) */
-.months-panel-taller.panel-scroll{
-  overflow-y: visible;
-}
-
 
 .month-members {
   margin-top: 0.45rem;

@@ -31,6 +31,19 @@ document.addEventListener('DOMContentLoaded', () => {
       relatorios: {}
     };
     if (!Array.isArray(raw.equipe)) raw.equipe = [];
+
+    // MIGRAÇÃO: campo "ativo" (default: true)
+    let changed = false;
+    raw.equipe.forEach((m) => {
+      if (typeof m.ativo !== 'boolean') {
+        m.ativo = true;
+        changed = true;
+      }
+    });
+    if (changed) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(raw));
+    }
+
     return raw;
   }
 
@@ -140,6 +153,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Toggle do checkbox "Ativar"
+  list.addEventListener('change', (e) => {
+    const chk = e.target.closest('input.chk-ativo');
+    if (!chk) return;
+
+    const index = Number(chk.dataset.index);
+    if (!Number.isInteger(index)) return;
+
+    const data = getData();
+    if (index < 0 || index >= data.equipe.length) return;
+
+    data.equipe[index].ativo = !!chk.checked;
+    saveData(data);
+  });
+
   function render() {
     const data = getData();
     const equipe = data.equipe;
@@ -154,9 +182,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     equipe.forEach((m, idx) => {
       const row = document.createElement('div');
-      row.className = 'member-row';
+      const isActive = (typeof m.ativo === 'boolean') ? m.ativo : true;
+      row.className = 'member-row' + (isActive ? '' : ' is-inactive');
 
       row.innerHTML = `
+        <div class="member-activate">
+          <input class="chk-ativo" type="checkbox" data-index="${idx}" ${isActive ? 'checked' : ''} aria-label="Ativar membro" />
+        </div>
+
         <div class="member-content">
           <div class="member-name">${escapeHtml(m.nome || '')}</div>
           <div class="member-meta">

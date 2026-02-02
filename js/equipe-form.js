@@ -285,6 +285,15 @@ document.addEventListener('DOMContentLoaded', () => {
     const data = getData();
     if (!Array.isArray(data.equipe)) data.equipe = [];
 
+    // "Ativo" default: true. Em edição/sobrescrita, preserva se já existir.
+    if (editMode && Number.isInteger(editIndex)) {
+      const prev = data.equipe[editIndex];
+      novo.ativo = (typeof prev?.ativo === 'boolean') ? prev.ativo : true;
+    } else {
+      const existing = data.equipe.find((m) => m.idKey === idKey);
+      novo.ativo = (typeof existing?.ativo === 'boolean') ? existing.ativo : true;
+    }
+
     // ====== EDIÇÃO ======
     if (editMode && Number.isInteger(editIndex)) {
       // Se existir outro registro com o mesmo ID, é conflito (não é o próprio registro)

@@ -109,7 +109,28 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
+    // MIGRAÇÃO: campo "ativo" (default: true)
+    let changedAtivo = false;
+    raw.equipe.forEach((m) => {
+      if (typeof m.ativo !== 'boolean') {
+        m.ativo = true;
+        changedAtivo = true;
+      }
+    });
+    if (changedAtivo) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(raw));
+    }
+
     return raw;
+  }
+
+  function getActiveEntries(data) {
+    const out = [];
+    data.equipe.forEach((m, idx) => {
+      const isActive = (typeof m.ativo === 'boolean') ? m.ativo : true;
+      if (isActive) out.push({ m, idx });
+    });
+    return out;
   }
 
   function saveData(data) {
@@ -221,9 +242,10 @@ document.addEventListener('DOMContentLoaded', () => {
     assignWrap.innerHTML = '';
     assignEmpty.classList.add('hidden');
 
-    if (!data.equipe.length) {
+    const activeEntries = getActiveEntries(data);
+    if (!activeEntries.length) {
       assignEmpty.classList.remove('hidden');
-      assignEmpty.textContent = 'Nenhum membro cadastrado.';
+      assignEmpty.textContent = 'Nenhum membro ativo.';
       assignTitle.textContent = 'Selecione um membro';
       assignCounter.textContent = '';
       return;
@@ -277,6 +299,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (m >= 13) { m = 1; y += 1; }
     state.year = y;
     state.month = m;
+    // mantém o Painel de Atividades sincronizado
+    state.panelYear = state.year;
   }
 
   /* ======================
@@ -342,7 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     const m = data.equipe[state.memberIndex];
-    monthsSelectionInfo.textContent = `${m.nome} — ${m.cargo}`;
+    monthsSelectionInfo.innerHTML = `<span class="member-selected-pill">${escapeHtml(m.nome)} — ${escapeHtml(m.cargo)}</span>`;
   }
 
   /* ======================
@@ -369,7 +393,7 @@ document.addEventListener('DOMContentLoaded', () => {
       tile.dataset.month = String(i);
 
       const members = [];
-      data.equipe.forEach((m) => {
+      getActiveEntries(data).forEach(({ m }) => {
         const mk = getMemberKey(m);
         if (hasAnyAssignmentForMonth(data, mk, state.panelYear, i)) {
           members.push(m.nome || '—');
@@ -398,13 +422,19 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderMembers(data) {
     membersWrap.innerHTML = '';
 
-    if (!data.equipe.length) {
+    const activeEntries = getActiveEntries(data);
+
+    if (!activeEntries.length) {
       membersEmpty.classList.remove('hidden');
+      // mensagem contextual se existir cadastro, mas nenhum ativo
+      if (data.equipe.length) {
+        membersEmpty.innerHTML = 'Nenhum membro ativo. Marque <strong>Ativar</strong> em <strong>Equipe Executora</strong>.';
+      }
       return;
     }
     membersEmpty.classList.add('hidden');
 
-    data.equipe.forEach((m, idx) => {
+    activeEntries.forEach(({ m, idx }) => {
       const key = getMemberKey(m);
 
       const card = document.createElement('button');
@@ -489,6 +519,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderAssignList(data);
     renderMonthsSelectionInfo(data);
     renderMonthsSelector(data);
+    renderPanel(data);
   });
 
   btnNextAssignMonth?.addEventListener('click', () => {
@@ -499,6 +530,7 @@ document.addEventListener('DOMContentLoaded', () => {
     renderAssignList(data);
     renderMonthsSelectionInfo(data);
     renderMonthsSelector(data);
+    renderPanel(data);
   });
 
   // seletor de mês
@@ -518,36 +550,51 @@ document.addEventListener('DOMContentLoaded', () => {
   // navegação de ano (seletor de mês)
   btnPrevYear?.addEventListener('click', () => {
     state.year = Number(state.year) - 1;
+    state.panelYear = state.year;
     const data = getData();
     saveUIState();
     renderAssignMonthLabel();
     renderAssignList(data);
     renderMonthsSelectionInfo(data);
     renderMonthsSelector(data);
+    renderPanel(data);
   });
 
   btnNextYear?.addEventListener('click', () => {
     state.year = Number(state.year) + 1;
+    state.panelYear = state.year;
     const data = getData();
     saveUIState();
     renderAssignMonthLabel();
     renderAssignList(data);
     renderMonthsSelectionInfo(data);
     renderMonthsSelector(data);
+    renderPanel(data);
   });
 
   // painel anual
   btnPrevPanelYear?.addEventListener('click', () => {
     state.panelYear = Number(state.panelYear) - 1;
+    // sincroniza o ano do painel com o seletor de mês e a atribuição
+    state.year = Number(state.panelYear);
     const data = getData();
     saveUIState();
+    renderAssignMonthLabel();
+    renderAssignList(data);
+    renderMonthsSelectionInfo(data);
+    renderMonthsSelector(data);
     renderPanel(data);
   });
 
   btnNextPanelYear?.addEventListener('click', () => {
     state.panelYear = Number(state.panelYear) + 1;
+    state.year = Number(state.panelYear);
     const data = getData();
     saveUIState();
+    renderAssignMonthLabel();
+    renderAssignList(data);
+    renderMonthsSelectionInfo(data);
+    renderMonthsSelector(data);
     renderPanel(data);
   });
 
@@ -567,12 +614,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // se não houver membro selecionado, tenta escolher automaticamente um que tenha atribuições nesse mês
     if (!state.memberKey || state.memberIndex == null) {
-      const idx = data.equipe.findIndex(mem => hasAnyAssignmentForMonth(data, getMemberKey(mem), state.year, state.month));
-      if (idx >= 0) {
-        const mem = data.equipe[idx];
-        state.memberIndex = idx;
-        state.memberKey = getMemberKey(mem);
-        state.roleKey = getRoleKeyForMember(mem);
+      const found = getActiveEntries(data).find(({ m }) => hasAnyAssignmentForMonth(data, getMemberKey(m), state.year, state.month));
+      if (found) {
+        state.memberIndex = found.idx;
+        state.memberKey = getMemberKey(found.m);
+        state.roleKey = getRoleKeyForMember(found.m);
       }
     }
 
@@ -598,19 +644,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const now = new Date();
     state.month = ui?.month ? Number(ui.month) : (now.getMonth() + 1);
 
-    state.panelYear = ui?.panelYear ? Number(ui.panelYear) : state.year;
+    // painel sempre acompanha o ano atual selecionado
+    state.panelYear = state.year;
 
-    if (data.equipe.length) {
-      const idx = ui?.memberKey
-        ? data.equipe.findIndex(m => getMemberKey(m) === ui.memberKey)
-        : 0;
+    const activeEntries = getActiveEntries(data);
+    if (activeEntries.length) {
+      const preferred = ui?.memberKey
+        ? activeEntries.find(({ m }) => getMemberKey(m) === ui.memberKey)
+        : null;
 
-      const chosenIdx = (idx >= 0) ? idx : 0;
-      const m = data.equipe[chosenIdx];
+      const chosen = preferred || activeEntries[0];
 
-      state.memberIndex = chosenIdx;
-      state.memberKey = getMemberKey(m);
-      state.roleKey = getRoleKeyForMember(m);
+      state.memberIndex = chosen.idx;
+      state.memberKey = getMemberKey(chosen.m);
+      state.roleKey = getRoleKeyForMember(chosen.m);
+    } else {
+      state.memberIndex = null;
+      state.memberKey = null;
+      state.roleKey = null;
     }
 
     renderMembers(data);
