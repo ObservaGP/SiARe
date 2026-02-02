@@ -27,9 +27,58 @@ document.addEventListener('DOMContentLoaded', () => {
   const modal = $('confirmModal');
   const btnNao = $('btnNao');
   const btnSim = $('btnSim');
+  const btnDuplicar = $('btnDuplicar');
 
   const onlyDigits = (s) => String(s || '').replace(/\D/g, '');
   const pad2 = (v) => onlyDigits(v).padStart(2, '0');
+
+  // Sufixo de duplicação (A, B, ..., Z, AA, AB...)
+  function suffixToNumber(s) {
+    const up = String(s || '').trim().toUpperCase();
+    if (!/^[A-Z]+$/.test(up)) return null;
+    let n = 0;
+    for (const ch of up) n = n * 26 + (ch.charCodeAt(0) - 64); // A=1
+    return n;
+  }
+
+  function numberToSuffix(n) {
+    let num = Number(n);
+    if (!Number.isFinite(num) || num < 1) return null;
+    let out = '';
+    while (num > 0) {
+      const r = (num - 1) % 26;
+      out = String.fromCharCode(65 + r) + out;
+      num = Math.floor((num - 1) / 26);
+    }
+    return out;
+  }
+
+  function parseIdKey(idKey) {
+    const raw = String(idKey || '');
+    const parts = raw.split('-');
+    const cpfDigits = parts[0] || '';
+    const version2 = parts[1] || '';
+    const suffix = parts.length >= 3 ? parts.slice(2).join('-') : '';
+    return { cpfDigits, version2, suffix };
+  }
+
+  function nextDuplicateSuffix(data, baseId) {
+    // baseId = CPF-00 (sem sufixo)
+    let maxN = 1; // base sem sufixo conta como A (1)
+    (data.equipe || []).forEach((m) => {
+      const k = String(m?.idKey || '');
+      if (k === baseId) {
+        maxN = Math.max(maxN, 1);
+        return;
+      }
+      if (k.startsWith(baseId + '-')) {
+        const suf = k.slice((baseId + '-').length);
+        const n = suffixToNumber(suf);
+        if (n) maxN = Math.max(maxN, n);
+      }
+    });
+    return numberToSuffix(maxN + 1); // B, C, ...
+  }
 
   const getData = () =>
     JSON.parse(localStorage.getItem(STORAGE_KEY)) || { equipe: [] };
@@ -40,6 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // ========= MODO EDIÇÃO =========
   let editMode = false;
   let editIndex = null;
+  let currentIdKey = null;
+  let currentSuffix = '';
 
   function loadEditFromURL() {
     const params = new URLSearchParams(window.location.search);
@@ -59,6 +110,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     editMode = true;
     editIndex = idx;
+    currentIdKey = m.idKey || null;
+    currentSuffix = parseIdKey(currentIdKey).suffix || '';
+
+    if (btnDuplicar) btnDuplicar.classList.remove('hidden');
 
     if (formTitle) formTitle.textContent = 'Editar Membro da Equipe';
 
@@ -163,14 +218,51 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
+
+  // ========= Duplicar (apenas em edição) =========
+  if (btnDuplicar) {
+    btnDuplicar.addEventListener('click', () => {
+      if (!editMode || !Number.isInteger(editIndex)) return;
+
+      const data = getData();
+      if (!Array.isArray(data.equipe)) data.equipe = [];
+      const original = data.equipe[editIndex];
+      if (!original) return;
+
+      const cpfDigits = onlyDigits(original.cpf);
+      const version2 = pad2(original.versaoVinculo || (String(original.idKey || '').split('-')[1] || '00'));
+      const baseId = `${cpfDigits}-${version2}`;
+
+      const suf = nextDuplicateSuffix(data, baseId); // B, C, ...
+      const newIdKey = `${baseId}-${suf}`;
+
+      const clone = JSON.parse(JSON.stringify(original));
+      clone.idKey = newIdKey;
+      clone.versaoVinculo = version2;
+
+      // mantém os campos textuais do clone como estão
+      const insertAt = editIndex + 1;
+      data.equipe.splice(insertAt, 0, clone);
+      saveData(data);
+
+      // abre o clone para edição
+      window.location.href = `equipe-form.html?edit=${insertAt}`;
+    });
+  }
+
   // ========= Submit =========
   form.addEventListener('submit', (e) => {
     e.preventDefault();
 
     const cpfDigits = onlyDigits(cpf.value);
     if (cpfDigits.length !== 11) return;
+    const version2 = pad2(versao.value);
+    let idKey = `${cpfDigits}-${version2}`;
 
-    const idKey = `${cpfDigits}-${pad2(versao.value)}`;
+    // Se estiver editando um registro duplicado (com sufixo), preserva o sufixo
+    if (editMode && currentSuffix) {
+      idKey = `${cpfDigits}-${version2}-${currentSuffix}`;
+    }
 
     const novo = {
       idKey,
@@ -186,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
       fim: fim.value,
       tipoVinculo: tipoVinculo.value.trim(),
       valorBolsa: valorBolsa.value.trim(),
-      versaoVinculo: pad2(versao.value),
+      versaoVinculo: version2,
       observacao: observacao.value.trim()
     };
 

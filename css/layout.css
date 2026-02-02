@@ -1166,3 +1166,61 @@ main,
   color: rgba(31, 111, 139, 0.55);
   font-weight: 900;
 }
+
+/* ======================
+   Equipe — reordenar linhas
+   ====================== */
+.member-order {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-right: 0.2rem;
+}
+
+.btn-icon-sm {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.btn-icon[disabled],
+.btn-icon-sm[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* ======================
+   Botão azul (Duplicar)
+   ====================== */
+.btn-info {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  font-weight: 600;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  text-decoration: none;
+  background: #3b82f6;
+  color: #fff;
+  transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
+}
+
+.btn-info:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.25);
+}
+
+.form-actions-right {
+  display: inline-flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.small {
+  font-size: 0.78rem;
+}

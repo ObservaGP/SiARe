@@ -53,6 +53,12 @@ document.addEventListener('DOMContentLoaded', () => {
       .replaceAll("'", '&#039;');
   }
 
+
+  function formatVersion(m) {
+    const v = String(m?.versaoVinculo || (String(m?.idKey || '').split('-')[1] || '')).replace(/\D/g, '');
+    return v ? v.padStart(2, '0') : '00';
+  }
+
   function abrirDeleteModal(nome, index) {
     pendingDeleteIndex = index;
     deleteTitle.innerHTML = `Deseja excluir o registro de <strong>${escapeHtml(nome)}</strong>?`;
@@ -103,7 +109,25 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!Number.isInteger(index)) return;
 
     const data = getData();
-    const membro = data.equipe?.[index];
+    if (!Array.isArray(data.equipe)) data.equipe = [];
+
+    if (index < 0 || index >= data.equipe.length) return;
+
+    // Reordenar (persistente via localStorage)
+    if (action === 'moveUp' || action === 'moveDown') {
+      const target = action === 'moveUp' ? index - 1 : index + 1;
+      if (target < 0 || target >= data.equipe.length) return;
+
+      const tmp = data.equipe[index];
+      data.equipe[index] = data.equipe[target];
+      data.equipe[target] = tmp;
+
+      saveData(data);
+      render();
+      return;
+    }
+
+    const membro = data.equipe[index];
     if (!membro) return;
 
     if (action === 'edit') {
@@ -142,11 +166,16 @@ document.addEventListener('DOMContentLoaded', () => {
             <strong>C.H.</strong>
             <span>c/ bolsa: ${escapeHtml(m.chBolsa || '')}h</span> ·
             <span>s/ bolsa: ${escapeHtml(m.chSemBolsa || '')}h</span> |
-            <span>${formatDateBR(m.inicio)} – ${formatDateBR(m.fim)}</span>
+            <span>${formatDateBR(m.inicio)} – ${formatDateBR(m.fim)}</span> |
+            <span>Versão: ${escapeHtml(formatVersion(m))}</span>
           </div>
         </div>
 
         <div class="member-actions">
+          <div class="member-order">
+            <button class="btn-icon btn-icon-sm" type="button" title="Subir" aria-label="Subir" data-action="moveUp" data-index="${idx}" ${idx === 0 ? 'disabled' : ''}>▲</button>
+            <button class="btn-icon btn-icon-sm" type="button" title="Descer" aria-label="Descer" data-action="moveDown" data-index="${idx}" ${idx === (equipe.length - 1) ? 'disabled' : ''}>▼</button>
+          </div>
           <button class="btn-icon btn-warning" type="button" title="Editar" aria-label="Editar" data-action="edit" data-index="${idx}">✏️</button>
           <button class="btn-icon btn-danger-icon" type="button" title="Excluir" aria-label="Excluir" data-action="delete" data-index="${idx}">🗑️</button>
         </div>
