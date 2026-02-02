@@ -1130,11 +1130,21 @@ main,
 /* ======================
    Painel de Atividades (meses + nomes)
    ====================== */
-.months-panel-taller {
-  max-height: 560px;
-  min-height: 560px;
+/* Antes estava fixo (min/max 560px). Agora começa “ajustado” e cresce conforme
+   os quadrinhos aumentam (sem rolagem interna). */
+.months-panel-taller{
+  height: auto;
+  max-height: none;
+  min-height: 320px;      /* base confortável; cresce conforme necessário */
   padding: 0.85rem 0.4rem;
+  overflow: visible;      /* deixa o container crescer com o conteúdo */
 }
+
+/* Sobrescreve o comportamento de .panel-scroll (que forçava scroll) */
+.months-panel-taller.panel-scroll{
+  overflow-y: visible;
+}
+
 
 .month-members {
   margin-top: 0.45rem;
