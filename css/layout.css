@@ -374,6 +374,36 @@ main,
   box-shadow: inset 0 2px 4px rgba(0,0,0,0.12);
 }
 
+
+/* ======================
+   Controles de mês (Atribuição)
+   ====================== */
+.month-controls{
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.btn-mini{
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+}
+
+.assign-right-head{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.35rem;
+}
+
+.assign-head-right{
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
 .btn-warning {
   border-color: rgba(227, 100, 20, 0.35);
 }
@@ -647,24 +677,6 @@ main,
   background: rgba(31, 111, 139, 0.06);
 }
 
-.reports-member-line {
-  display: grid;
-  grid-template-columns: minmax(140px, 220px) 1fr auto;
-  gap: 1rem;
-  align-items: baseline;
-}
-
-.reports-member-role {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.reports-member-ch {
-  white-space: nowrap;
-  text-align: right;
-}
-
 .reports-member-name {
   font-weight: 900;
   font-size: 1.02rem;
@@ -807,6 +819,67 @@ main,
   .months-grid { grid-template-columns: repeat(2, minmax(140px, 1fr)); }
 }
 
+/* ======================
+   Relatórios — linha de seleção destacada
+   ====================== */
+/* Chip de seleção (Atividades) */
+.reports-selection{
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+
+  padding: 0.55rem 0.8rem;
+  border-radius: 12px;
+
+  background: rgba(31, 111, 139, 0.08);
+  border: 1px solid rgba(31, 111, 139, 0.18);
+  border-left: 6px solid var(--accent);
+
+  color: var(--text);
+  line-height: 1.25;
+}
+
+/* Nome (negrito) */
+.reports-selection .sel-nome{
+  font-weight: 900;
+  font-size: 0.92rem;
+}
+
+/* Separador “|” azul claro */
+.reports-selection .sel-sep{
+  padding: 0 0.75rem;
+  color: rgba(31, 111, 139, 0.35);
+  font-weight: 800;
+}
+
+/* Cargo (SEM negrito) */
+.reports-selection .sel-cargo{
+  font-weight: 500;
+  font-size: 0.90rem;
+  color: rgba(31, 41, 51, 0.72);
+}
+
+/* Mês/ano (negrito) */
+.reports-selection .sel-mes{
+  font-weight: 900;
+  font-size: 0.90rem;
+  color: rgba(31, 41, 51, 0.90);
+}
+
+/* Estado “vazio” */
+.reports-selection.is-empty{
+  border-left-color: rgba(31, 111, 139, 0.35);
+}
+
+/* opcional: deixa a linha sempre visível dentro do card, quando rolar */
+.report-box .reports-selection {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  margin-top: 0.1rem;
+}
+
+
 /* =========================================================
    Extensões necessárias (importadas da v8 para compatibilidade)
    ========================================================= */
@@ -877,4 +950,219 @@ main,
 
 .task-item:first-child {
   border-top: none;
+}
+
+/* ======================
+   Relatórios — nova lógica (Atribuição por pessoa)
+   ====================== */
+
+.members-panel-tall {
+  max-height: 440px; /* ~2x do original */
+}
+
+.assign-grid {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.assign-right {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  min-width: 0;
+}
+
+.assign-right-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.assign-head-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+}
+
+.assign-head-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+.mode-tabs {
+  display: inline-flex;
+  gap: 0.25rem;
+  padding: 0.22rem;
+  border-radius: 12px;
+  border: 1px solid rgba(31, 111, 139, 0.18);
+  background: rgba(31, 111, 139, 0.06);
+}
+
+.mode-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0.4rem 0.75rem;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.mode-btn.is-active {
+  background: #ffffff;
+  color: var(--text);
+  border: 1px solid rgba(31, 111, 139, 0.22);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+}
+
+.assign-panel {
+  max-height: 440px;
+  padding: 0.4rem 0.2rem;
+}
+
+.reports-member-card-multiline {
+  padding: 0.85rem 0.9rem;
+}
+
+.reports-member-card.is-selected {
+  border-left: 6px solid var(--accent);
+  padding-left: 0.75rem; /* compensa a borda esquerda */
+}
+
+.reports-member-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.reports-member-sub,
+.reports-member-chline,
+.reports-member-daterange {
+  font-size: 0.86rem;
+  color: var(--muted);
+  line-height: 1.25;
+}
+
+.reports-member-sub .sep-asterisk {
+  color: rgba(31, 111, 139, 0.45);
+  font-weight: 800;
+  padding: 0 0.2rem;
+}
+
+.reports-member-daterange {
+  color: rgba(31, 41, 51, 0.72);
+  font-weight: 700;
+}
+
+.assign-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.55rem 0.6rem;
+  border-top: 1px solid rgba(31, 111, 139, 0.14);
+  cursor: pointer;
+  user-select: none;
+}
+
+.assign-item:first-child { border-top: 0; }
+
+.assign-check {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.assign-num {
+  width: 40px;
+  text-align: center;
+  font-weight: 900;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.assign-text {
+  color: var(--text);
+  font-size: 0.92rem;
+}
+
+.assign-item.is-checked {
+  background: rgba(31, 111, 139, 0.06);
+}
+
+.assign-item.is-checked .assign-text {
+  color: #2563eb;
+}
+
+/* Ano em “pill” para destacar */
+.year-pill {
+  padding: 0.35rem 0.85rem;
+  border: 1px solid rgba(31, 111, 139, 0.22);
+  border-radius: 999px;
+  background: rgba(31, 111, 139, 0.06);
+}
+
+/* O chip de seleção não deve empurrar layout */
+.report-box .reports-selection {
+  position: static;
+  margin-top: 0.1rem;
+}
+
+@media (max-width: 900px) {
+  .assign-grid {
+    grid-template-columns: 1fr;
+  }
+  .members-panel-tall,
+  .assign-panel {
+    max-height: 320px;
+  }
+}
+
+
+
+/* ======================
+   Painel de Atividades (meses + nomes)
+   ====================== */
+.months-panel-taller {
+  max-height: 560px;
+  min-height: 560px;
+  padding: 0.85rem 0.4rem;
+}
+
+.month-members {
+  margin-top: 0.45rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: rgba(31, 41, 51, 0.70);
+  line-height: 1.25;
+  min-height: 2.4em; /* mantém altura e evita pular */
+  white-space: normal;
+}
+
+.month-members .muted {
+  font-weight: 700;
+  color: rgba(31, 41, 51, 0.58);
+}
+
+
+/* ======================
+   Relatórios — marcadores (•) nos nomes
+   ====================== */
+.reports-member-name::before{
+  content: "• ";
+  color: rgba(31, 111, 139, 0.55);
+  font-weight: 900;
+}
+
+.month-members > div::before{
+  content: "• ";
+  color: rgba(31, 111, 139, 0.55);
+  font-weight: 900;
 }

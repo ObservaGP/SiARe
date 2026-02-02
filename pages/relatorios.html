@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SiARe — Sistema de Acompanhamento de Relatórios</</title>
+  <title>Relatórios — SiARe</title>
 
   <link rel="stylesheet" href="../css/layout.css" />
   <script src="../js/sidebar.js" defer></script>
@@ -17,63 +17,95 @@
   <!-- ================= CONTEÚDO ================= -->
   <main class="page-main">
 
-<header class="version-toolbar">
-  <div>
-    <div class="h2-like">Relatórios</div>
-    <div class="version-label">Selecione o membro, o mês e marque as atividades realizadas.</div>
-  </div>
-</header>
+    <header class="version-toolbar">
+      <div>
+        <div class="h2-like">Relatórios</div>
+        <div class="version-label">Atribua atividades aos membros e depois marque as atividades realizadas por mês.</div>
+      </div>
+    </header>
 
-<!-- 1) MEMBROS -->
+    <!-- 1) ATRIBUIÇÃO DE ATIVIDADES -->
+    <section class="section-box report-box">
+      <div class="section-header">
+        <div>
+          <h3>Atribuição de Atividades</h3>
+          <div class="text-muted">Selecione um membro à esquerda e marque as atividades à direita</div>
+        </div>
+      </div>
+
+      <div class="assign-grid">
+        <!-- esquerda: membros -->
+        <div class="assign-left">
+          <div id="reportsMembers" class="panel-scroll members-panel members-panel-tall" aria-label="Lista de membros"></div>
+
+          <div id="reportsMembersEmpty" class="empty-state hidden">
+            Nenhum membro cadastrado. Cadastre em <strong>Equipe Executora</strong>.
+          </div>
+        </div>
+
+        <!-- direita: atividades (atribuição ou mês) -->
+        <div class="assign-right">
+          <div class="assign-right-head">
+            <div class="assign-head-left">
+              <div id="assignTitle" class="text-muted">Selecione um membro</div>
+            </div>
+
+            <div class="assign-head-right">
+              <div class="month-controls" aria-label="Mês da atribuição">
+                <button id="btnPrevAssignMonth" class="btn-icon btn-mini" type="button" aria-label="Mês anterior">◀</button>
+                <div id="assignMonthLabel" class="year-label year-pill">—</div>
+                <button id="btnNextAssignMonth" class="btn-icon btn-mini" type="button" aria-label="Próximo mês">▶</button>
+              </div>
+              <div id="assignCounter" class="reports-counter text-muted"></div>
+            </div>
+          </div>
+
+
+          <div id="reportsAssignTasks" class="panel-scroll assign-panel" aria-label="Lista de atividades"></div>
+
+          <div id="reportsAssignEmpty" class="empty-state hidden">
+            Selecione um membro para continuar.
+          </div>
+        </div>
+      </div>
+    </section>
+<!-- 2) MÊS (seleção para relatórios) -->
 <section class="section-box report-box">
   <div class="section-header">
-    <h3>Membros da Equipe</h3>
-    <div class="text-muted">Clique em um membro para selecionar</div>
-  </div>
-
-  <div id="reportsMembers" class="panel-scroll members-panel" aria-label="Lista de membros"></div>
-
-  <div id="reportsMembersEmpty" class="empty-state hidden">
-    Nenhum membro cadastrado. Cadastre em <strong>Equipe Executora</strong>.
-  </div>
-</section>
-
-<!-- 2) MESES -->
-<section class="section-box report-box">
-  <div class="section-header">
-    <h3>Mês</h3>
+    <div>
+      <h3>Mês</h3>
+      <div id="monthsSelectionInfo" class="text-muted">Selecione um membro acima</div>
+    </div>
 
     <div class="year-controls">
       <button id="btnPrevYear" class="btn-icon" type="button" aria-label="Ano anterior">◀</button>
-      <div id="yearLabel" class="year-label">—</div>
+      <div id="yearLabel" class="year-label year-pill">—</div>
       <button id="btnNextYear" class="btn-icon" type="button" aria-label="Próximo ano">▶</button>
     </div>
   </div>
 
-  <div id="reportsMonths" class="panel-scroll months-panel" aria-label="Seletor de meses"></div>
+  <div id="reportsMonthsSelect" class="panel-scroll months-panel" aria-label="Seletor de meses"></div>
 </section>
 
-<!-- 3) ATIVIDADES -->
+<!-- 3) PAINEL DE ATIVIDADES (atribuições por mês, no ano) -->
 <section class="section-box report-box">
   <div class="section-header">
     <div>
-      <h3>Atividades</h3>
-      <div id="reportsSelectionInfo" class="text-muted">Selecione um membro e um mês</div>
+      <h3>Painel de Atividades</h3>
+      <div class="text-muted">Visão anual das atribuições por mês</div>
     </div>
 
-    <div id="reportsCounter" class="reports-counter text-muted"></div>
+    <div class="year-controls">
+      <button id="btnPrevPanelYear" class="btn-icon" type="button" aria-label="Ano anterior">◀</button>
+      <div id="panelYearLabel" class="year-label year-pill">—</div>
+      <button id="btnNextPanelYear" class="btn-icon" type="button" aria-label="Próximo ano">▶</button>
+    </div>
   </div>
 
-  <div id="reportsTasks" class="panel-scroll tasks-panel" aria-label="Lista de atividades"></div>
-
-  <div id="reportsTasksEmpty" class="empty-state hidden">
-    Nenhuma atividade aplicável para este membro.<br />
-    Ajuste as atribuições em <strong>Atividades</strong>.
-  </div>
+  <div id="panelMonths" class="panel-scroll months-panel months-panel-taller" aria-label="Painel anual de atividades"></div>
 </section>
-
 </main>
 
-<script src="../js/relatorios.js" defer></script>
+  <script src="../js/relatorios.js" defer></script>
 </body>
 </html>
