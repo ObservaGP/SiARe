@@ -89,6 +89,54 @@ aside nav a {
   font-size: 0.95rem;
 }
 
+/* Botão de grupo (colapsável) na sidebar */
+aside nav .nav-toggle {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: #ffffff;
+  width: 100%;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+aside nav .nav-toggle:hover {
+  background: rgba(255,255,255,0.15);
+}
+
+aside nav .nav-caret {
+  display: inline-flex;
+  transition: transform 0.15s ease;
+}
+
+aside nav .nav-group.open .nav-caret {
+  transform: rotate(180deg);
+}
+
+/* Submenu */
+aside nav .submenu {
+  list-style: none;
+  margin: 0.15rem 0 0.35rem;
+  padding: 0.15rem 0 0.15rem 0.85rem;
+  border-left: 1px solid rgba(255,255,255,0.22);
+}
+
+aside nav .submenu li {
+  margin-bottom: 0.15rem;
+}
+
+aside nav .submenu a {
+  padding: 0.4rem 0.55rem;
+  font-size: 0.92rem;
+}
+
 aside nav a:hover {
   background: rgba(255,255,255,0.15);
 }

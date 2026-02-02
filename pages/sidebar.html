@@ -3,10 +3,20 @@
 
 <nav>
   <ul>
-    <li><a href="inicio.html" data-page="inicio">Visão geral</a></li>
+    <li><a href="inicio.html" data-page="inicio">Início</a></li>
     <li><a href="relatorios.html" data-page="relatorios">Relatórios</a></li>
-    <li><a href="equipe.html" data-page="equipe">Equipe Executora</a></li>
     <li><a href="atividades.html" data-page="atividades">Atividades</a></li>
-    <li><a href="administrativo.html" data-page="administrativo">Administrativo</a></li>
+
+    <!-- Grupo colapsável: Administrativo -->
+    <li class="nav-group" data-group="administrativo">
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="submenu-administrativo">
+        <span>Administrativo</span>
+        <span class="nav-caret" aria-hidden="true">▾</span>
+      </button>
+      <ul id="submenu-administrativo" class="submenu" hidden>
+        <li><a href="equipe.html" data-page="equipe">Equipe Executora</a></li>
+        <li><a href="administrativo.html" data-page="administrativo">Painel Administrativo</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
