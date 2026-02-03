@@ -1,7 +1,13 @@
 const STORAGE_KEY = 'siare_data';
+const SORT_KEY = 'siare_atividades_sort'; // 'asc' | 'desc' | 'num_asc' | 'num_desc' | 'none'
 
 document.addEventListener('DOMContentLoaded', () => {
   const btnAdd = document.getElementById('btnAddAtividade');
+  const btnSortNumAsc = document.getElementById('btnSortNumAsc');
+  const btnSortNumDesc = document.getElementById('btnSortNumDesc');
+  const btnSortAZ = document.getElementById('btnSortAZ');
+  const btnSortZA = document.getElementById('btnSortZA');
+
   const tbody = document.getElementById('activitiesBody');
   const empty = document.getElementById('activitiesEmpty');
 
@@ -26,6 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error('[SiARe] Elementos da página Atividades não encontrados (btnAddAtividade/activitiesBody/activitiesEmpty).');
     return;
   }
+
+  const collator = new Intl.Collator('pt-BR', { sensitivity: 'base', numeric: true });
 
   const roles = [
     { key: 'coordenador', label: 'Coordenador', checkbox: chkCoord },
@@ -62,6 +70,52 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!a.id) { a.id = makeId('act'); changed = true; }
     });
     if (changed) saveData(data);
+  }
+
+  function ensureActivitySeq(data) {
+    // "Nº" fixo: um seq atribuído uma única vez por registro
+    let changed = false;
+
+    let maxSeq = 0;
+    data.atividades.forEach((a) => {
+      const n = Number(a.seq);
+      if (Number.isFinite(n) && n > maxSeq) maxSeq = n;
+    });
+
+    data.atividades.forEach((a) => {
+      const n = Number(a.seq);
+      if (!Number.isFinite(n) || n <= 0) {
+        maxSeq += 1;
+        a.seq = maxSeq;
+        changed = true;
+      }
+    });
+
+    if (changed) saveData(data);
+  }
+
+  function getSortPref() {
+    const v = String(localStorage.getItem(SORT_KEY) || 'none');
+    return (v === 'asc' || v === 'desc' || v === 'num_asc' || v === 'num_desc') ? v : 'none';
+  }
+
+  function setSortPref(v) {
+    const val = (v === 'asc' || v === 'desc' || v === 'num_asc' || v === 'num_desc') ? v : 'none';
+    localStorage.setItem(SORT_KEY, val);
+  }
+
+  function updateSortButtons() {
+    const pref = getSortPref();
+    btnSortNumAsc?.classList.toggle('is-active', pref === 'num_asc');
+    btnSortNumDesc?.classList.toggle('is-active', pref === 'num_desc');
+    btnSortAZ?.classList.toggle('is-active', pref === 'asc');
+    btnSortZA?.classList.toggle('is-active', pref === 'desc');
+
+    if (btnSortNumAsc) btnSortNumAsc.title = (pref === 'num_asc') ? 'Remover ordenação (0–9)' : 'Ordenar 0–9';
+    if (btnSortNumDesc) btnSortNumDesc.title = (pref === 'num_desc') ? 'Remover ordenação (9–0)' : 'Ordenar 9–0';
+
+    if (btnSortAZ) btnSortAZ.title = (pref === 'asc') ? 'Remover ordenação (A–Z)' : 'Ordenar A–Z';
+    if (btnSortZA) btnSortZA.title = (pref === 'desc') ? 'Remover ordenação (Z–A)' : 'Ordenar Z–A';
   }
 
   function escapeHtml(str) {
@@ -126,6 +180,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
   btnAdd.addEventListener('click', () => abrirModalAdicionar());
 
+  // Ordenação: A–Z / Z–A (persistente e refletida em outras telas)
+  btnSortNumAsc?.addEventListener('click', () => {
+    const pref = getSortPref();
+    setSortPref(pref === 'num_asc' ? 'none' : 'num_asc');
+    render();
+  });
+
+  btnSortNumDesc?.addEventListener('click', () => {
+    const pref = getSortPref();
+    setSortPref(pref === 'num_desc' ? 'none' : 'num_desc');
+    render();
+  });
+
+  btnSortAZ?.addEventListener('click', () => {
+    const pref = getSortPref();
+    setSortPref(pref === 'asc' ? 'none' : 'asc');
+    render();
+  });
+
+  btnSortZA?.addEventListener('click', () => {
+    const pref = getSortPref();
+    setSortPref(pref === 'desc' ? 'none' : 'desc');
+    render();
+  });
+
   btnActCancel?.addEventListener('click', (e) => {
     e.preventDefault();
     fecharModalAtividade();
@@ -168,8 +247,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const data = getData();
-    const existingId = (editingIndex !== null && data.atividades[editingIndex]) ? data.atividades[editingIndex].id : null;
-    const novo = { id: existingId || makeId('act'), descricao: desc, atribuicao };
+    ensureActivityIds(data);
+    ensureActivitySeq(data);
+
+    const existing = (editingIndex !== null && data.atividades[editingIndex]) ? data.atividades[editingIndex] : null;
+
+    const novo = {
+      id: existing?.id || makeId('act'),
+      seq: existing?.seq, // mantém o "Nº" fixo
+      descricao: desc,
+      atribuicao
+    };
 
     if (editingIndex !== null) {
       data.atividades[editingIndex] = novo;
@@ -178,6 +266,14 @@ document.addEventListener('DOMContentLoaded', () => {
       render();
       return;
     }
+
+    // novo registro: próximo seq
+    let maxSeq = 0;
+    data.atividades.forEach((a) => {
+      const n = Number(a.seq);
+      if (Number.isFinite(n) && n > maxSeq) maxSeq = n;
+    });
+    novo.seq = maxSeq + 1;
 
     data.atividades.push(novo);
     saveData(data);
@@ -226,8 +322,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function render() {
     const data = getData();
     ensureActivityIds(data);
-    const atividades = data.atividades;
+    ensureActivitySeq(data);
+    updateSortButtons();
 
+    const atividades = data.atividades || [];
     tbody.innerHTML = '';
 
     if (!atividades.length) {
@@ -236,9 +334,33 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     empty.classList.add('hidden');
 
-    atividades.forEach((a, idx) => {
-      const tr = document.createElement('tr');
+    // Para ordenar sem quebrar edição/checkboxes: guardamos o índice original
+    const display = atividades.map((a, idx) => ({ a, idx }));
 
+    const pref = getSortPref();
+    if (pref === 'asc' || pref === 'desc') {
+      display.sort((x, y) => {
+        const ax = String(x.a?.descricao || '');
+        const ay = String(y.a?.descricao || '');
+        const c = collator.compare(ax, ay);
+        if (c !== 0) return pref === 'asc' ? c : -c;
+        const sx = Number(x.a?.seq) || 0;
+        const sy = Number(y.a?.seq) || 0;
+        return sx - sy;
+      });
+    } else if (pref === 'num_asc' || pref === 'num_desc') {
+      display.sort((x, y) => {
+        const sx = Number(x.a?.seq) || 0;
+        const sy = Number(y.a?.seq) || 0;
+        if (sx !== sy) return (pref === 'num_asc') ? (sx - sy) : (sy - sx);
+        const ax = String(x.a?.descricao || '');
+        const ay = String(y.a?.descricao || '');
+        return collator.compare(ax, ay);
+      });
+    }
+
+    display.forEach(({ a, idx }) => {
+      const tr = document.createElement('tr');
       const desc = escapeHtml(a.descricao || '');
 
       const checks = roles.map(r => {
@@ -250,8 +372,11 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
       }).join('');
 
+      const seq = Number(a.seq);
+      const numCell = Number.isFinite(seq) && seq > 0 ? String(seq) : String(idx + 1);
+
       tr.innerHTML = `
-        <td class="col-num">${idx + 1}</td>
+        <td class="col-num">${escapeHtml(numCell)}</td>
         <td class="col-atividade">${desc}</td>
         ${checks}
         <td class="col-acoes">

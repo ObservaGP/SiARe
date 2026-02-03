@@ -1,5 +1,6 @@
 const STORAGE_KEY = 'siare_data';
 const UI_KEY = 'siare_reports_ui';
+const SORT_KEY = 'siare_atividades_sort'; // 'asc' | 'desc' | 'num_asc' | 'num_desc' | 'none'
 
 document.addEventListener('DOMContentLoaded', () => {
   // ======= Elementos (Atribuição) =======
@@ -14,6 +15,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnPrevAssignMonth = document.getElementById('btnPrevAssignMonth');
   const btnNextAssignMonth = document.getElementById('btnNextAssignMonth');
   const assignMonthLabel = document.getElementById('assignMonthLabel');
+
+  // Ordenação da lista de atividades (Atribuição)
+  const btnAssignSortNumAsc = document.getElementById('btnAssignSortNumAsc');
+  const btnAssignSortNumDesc = document.getElementById('btnAssignSortNumDesc');
+  const btnAssignSortAZ = document.getElementById('btnAssignSortAZ');
+  const btnAssignSortZA = document.getElementById('btnAssignSortZA');
 
   // ======= Elementos (Mês – seletor) =======
   const monthsWrap = document.getElementById('reportsMonthsSelect');
@@ -37,6 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
     'JANEIRO', 'FEVEREIRO', 'MARÇO', 'ABRIL', 'MAIO', 'JUNHO',
     'JULHO', 'AGOSTO', 'SETEMBRO', 'OUTUBRO', 'NOVEMBRO', 'DEZEMBRO'
   ];
+
+  const collator = new Intl.Collator('pt-BR', { sensitivity: 'base', numeric: true });
 
   const CARGO_TO_ROLEKEY = {
     'Coordenador': 'coordenador',
@@ -121,6 +130,9 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(raw));
     }
 
+    ensureActivityIds(raw);
+    ensureActivitySeq(raw);
+
     return raw;
   }
 
@@ -148,7 +160,76 @@ document.addEventListener('DOMContentLoaded', () => {
     if (changed) saveData(data);
   }
 
-  function getMemberKey(m) {
+  
+  function ensureActivitySeq(data) {
+    let changed = false;
+
+    let maxSeq = 0;
+    data.atividades.forEach((a) => {
+      const n = Number(a.seq);
+      if (Number.isFinite(n) && n > maxSeq) maxSeq = n;
+    });
+
+    data.atividades.forEach((a) => {
+      const n = Number(a.seq);
+      if (!Number.isFinite(n) || n <= 0) {
+        maxSeq += 1;
+        a.seq = maxSeq;
+        changed = true;
+      }
+    });
+
+    if (changed) saveData(data);
+  }
+
+  function getSortPref() {
+    const v = String(localStorage.getItem(SORT_KEY) || 'none');
+    return (v === 'asc' || v === 'desc' || v === 'num_asc' || v === 'num_desc') ? v : 'none';
+  }
+
+  function setSortPref(v) {
+    const val = (v === 'asc' || v === 'desc' || v === 'num_asc' || v === 'num_desc') ? v : 'none';
+    localStorage.setItem(SORT_KEY, val);
+  }
+
+  function updateAssignSortButtons() {
+    const pref = getSortPref();
+    btnAssignSortNumAsc?.classList.toggle('is-active', pref === 'num_asc');
+    btnAssignSortNumDesc?.classList.toggle('is-active', pref === 'num_desc');
+    btnAssignSortAZ?.classList.toggle('is-active', pref === 'asc');
+    btnAssignSortZA?.classList.toggle('is-active', pref === 'desc');
+
+    if (btnAssignSortNumAsc) btnAssignSortNumAsc.title = (pref === 'num_asc') ? 'Remover ordenação (0–9)' : 'Ordenar 0–9';
+    if (btnAssignSortNumDesc) btnAssignSortNumDesc.title = (pref === 'num_desc') ? 'Remover ordenação (9–0)' : 'Ordenar 9–0';
+    if (btnAssignSortAZ) btnAssignSortAZ.title = (pref === 'asc') ? 'Remover ordenação (A–Z)' : 'Ordenar A–Z';
+    if (btnAssignSortZA) btnAssignSortZA.title = (pref === 'desc') ? 'Remover ordenação (Z–A)' : 'Ordenar Z–A';
+  }
+
+  function sortActivitiesByPref(list) {
+    const pref = getSortPref();
+    if (pref === 'none') return list.slice();
+
+    return list.slice().sort((a, b) => {
+      const sx = Number(a?.seq) || 0;
+      const sy = Number(b?.seq) || 0;
+
+      if (pref === 'num_asc' || pref === 'num_desc') {
+        if (sx !== sy) return (pref === 'num_asc') ? (sx - sy) : (sy - sx);
+        const ax = String(a?.descricao || '');
+        const ay = String(b?.descricao || '');
+        return collator.compare(ax, ay);
+      }
+
+      // pref textual: asc/desc
+      const ax = String(a?.descricao || '');
+      const ay = String(b?.descricao || '');
+      const c = collator.compare(ax, ay);
+      if (c !== 0) return (pref === 'asc') ? c : -c;
+      return sx - sy;
+    });
+  }
+
+function getMemberKey(m) {
     // Preferência: ID único do registro (CPF + versão), se existir
     const idKey = String(m.idKey || m.id || m.registroId || m.idRegistro || m.registro || '').trim();
     if (idKey) return idKey;
@@ -206,7 +287,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function getRoleActivities(data, roleKey) {
     if (!roleKey) return [];
-    return data.atividades.filter(a => !!(a.atribuicao && a.atribuicao[roleKey]));
+    const filtered = data.atividades.filter(a => !!(a.atribuicao && a.atribuicao[roleKey]));
+    return sortActivitiesByPref(filtered);
   }
 
   /* ======================
@@ -239,6 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderAssignList(data) {
+    updateAssignSortButtons();
     assignWrap.innerHTML = '';
     assignEmpty.classList.add('hidden');
 
@@ -274,13 +357,16 @@ document.addEventListener('DOMContentLoaded', () => {
       const checked = isAssignedMonthly(data, state.memberKey, state.year, state.month, a.id);
       if (checked) done++;
 
+      const n = Number(a.seq);
+      const numLabel = String((Number.isFinite(n) && n > 0) ? n : (idx + 1)).padStart(2, '0');
+
       const item = document.createElement('label');
       item.className = 'assign-item' + (checked ? ' is-checked' : '');
       item.dataset.actId = a.id;
 
       item.innerHTML = `
         <input class="assign-check" type="checkbox" ${checked ? 'checked' : ''} />
-        <span class="assign-num">${String(idx + 1).padStart(2, '0')}</span>
+        <span class="assign-num">${numLabel}</span>
         <span class="assign-text">${escapeHtml(a.descricao || '')}</span>
       `;
 
@@ -308,7 +394,10 @@ document.addEventListener('DOMContentLoaded', () => {
      ====================== */
   function getAllIndexById(data) {
     const map = new Map();
-    data.atividades.forEach((a, idx) => map.set(a.id, idx + 1));
+    data.atividades.forEach((a, idx) => {
+      const n = Number(a.seq);
+      map.set(a.id, (Number.isFinite(n) && n > 0) ? n : (idx + 1));
+    });
     return map;
   }
 
@@ -486,6 +575,19 @@ document.addEventListener('DOMContentLoaded', () => {
     renderMonthsSelector(data);
     renderPanel(data);
   });
+
+  // Ordenação da lista (Atribuição de Atividades)
+  function applyAssignSort(mode) {
+    const pref = getSortPref();
+    setSortPref(pref === mode ? 'none' : mode);
+    const data = getData();
+    renderAssignList(data);
+  }
+
+  btnAssignSortNumAsc?.addEventListener('click', () => applyAssignSort('num_asc'));
+  btnAssignSortNumDesc?.addEventListener('click', () => applyAssignSort('num_desc'));
+  btnAssignSortAZ?.addEventListener('click', () => applyAssignSort('asc'));
+  btnAssignSortZA?.addEventListener('click', () => applyAssignSort('desc'));
 
   // checkbox na lista de atribuição
   assignWrap.addEventListener('change', (e) => {

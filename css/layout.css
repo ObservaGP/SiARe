@@ -621,6 +621,56 @@ main,
 .activities-table .col-atividade {
   min-width: 320px;
 }
+
+/* Cabeçalho da coluna de atividade + botões de ordenação */
+.th-atividade{
+  display:flex;
+  align-items:center;
+  justify-content: space-between;
+  gap: .6rem;
+  flex-wrap: wrap;        /* se apertar, os botões descem uma linha */
+}
+
+.sort-controls{
+  display:inline-flex;
+  gap: .35rem;
+  flex: 0 0 auto;         /* não encolhe */
+}
+
+.sort-btn{
+  padding: .22rem .5rem;
+  border-radius: 10px;
+  border: 1px solid rgba(31, 111, 139, 0.22);
+  background: #ffffff;
+  font-weight: 800;
+  font-size: 0.72rem;
+  cursor: pointer;
+  line-height: 1.1;
+
+  white-space: nowrap;    /* não quebra "0–9", "A–Z" */
+  min-width: 42px;        /* mantém o formato consistente */
+  text-align: center;
+}
+
+
+.sort-btn:active{
+  transform: translateY(1px);
+}
+
+.sort-btn.is-active{
+  background: var(--primary);
+  border-color: rgba(31, 111, 139, 0.55);
+  color: #ffffff;
+}
+
+/* Barra de ordenação usada também na lista de atribuições (Relatórios) */
+.assign-sortbar{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+  padding: .35rem .05rem;
+  margin: .1rem 0 .35rem 0;
+}
 .activities-table .col-num {
   width: 56px;
   text-align: center;
