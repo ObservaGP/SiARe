@@ -46,6 +46,12 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   const collator = new Intl.Collator('pt-BR', { sensitivity: 'base', numeric: true });
+  function getActivityNumber(a, fallback) {
+    const raw = (a && (a.classificacao ?? a.seq)) ?? fallback;
+    const n = Number(raw);
+    return (Number.isFinite(n) && n > 0) ? n : (Number(fallback) || 0);
+  }
+
 
   const CARGO_TO_ROLEKEY = {
     'Coordenador': 'coordenador',
@@ -210,8 +216,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (pref === 'none') return list.slice();
 
     return list.slice().sort((a, b) => {
-      const sx = Number(a?.seq) || 0;
-      const sy = Number(b?.seq) || 0;
+      const sx = getActivityNumber(a, 0);
+      const sy = getActivityNumber(b, 0);
 
       if (pref === 'num_asc' || pref === 'num_desc') {
         if (sx !== sy) return (pref === 'num_asc') ? (sx - sy) : (sy - sx);
@@ -357,8 +363,8 @@ function getMemberKey(m) {
       const checked = isAssignedMonthly(data, state.memberKey, state.year, state.month, a.id);
       if (checked) done++;
 
-      const n = Number(a.seq);
-      const numLabel = String((Number.isFinite(n) && n > 0) ? n : (idx + 1)).padStart(2, '0');
+      const n = getActivityNumber(a, (idx + 1));
+      const numLabel = String(n).padStart(2, '0');
 
       const item = document.createElement('label');
       item.className = 'assign-item' + (checked ? ' is-checked' : '');
@@ -395,8 +401,8 @@ function getMemberKey(m) {
   function getAllIndexById(data) {
     const map = new Map();
     data.atividades.forEach((a, idx) => {
-      const n = Number(a.seq);
-      map.set(a.id, (Number.isFinite(n) && n > 0) ? n : (idx + 1));
+      const n = getActivityNumber(a, (idx + 1));
+      map.set(a.id, n);
     });
     return map;
   }
