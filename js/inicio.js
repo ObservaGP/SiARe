@@ -2,6 +2,26 @@ const STORAGE_KEY = 'siare_data';
 const ADMIN_KEY_KEY = 'siare_admin_key';
 
 /* =========================
+   Carregar dados do projeto (Sigla/Nome)
+   ========================= */
+document.addEventListener('DOMContentLoaded', () => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const data = JSON.parse(raw);
+    const projeto = data.projeto || {};
+
+    const siglaEl = document.getElementById('inicioSigla');
+    const nomeEl = document.getElementById('inicioNomeProjeto');
+
+    if (siglaEl && projeto.sigla) siglaEl.textContent = projeto.sigla;
+    if (nomeEl && projeto.nome) nomeEl.textContent = projeto.nome;
+  } catch {
+    // silencioso
+  }
+});
+
+/* =========================
    Exportar
    ========================= */
 document.getElementById('btnExportar').addEventListener('click', () => {

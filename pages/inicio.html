@@ -19,7 +19,10 @@
 
     <!-- TOPO -->
     <header class="version-toolbar">
-      <div class="h2-like">SiARe</div>
+      <div>
+        <div class="h2-like">SiARe</div>
+        <div class="subtitle" style="margin-top:0.15rem;">Sistema de Acompanhamento de Relatórios</div>
+      </div>
       <span class="version-label">Versão inicial</span>
     </header>
 
@@ -35,21 +38,21 @@
     <!-- DADOS DO PROJETO (CAIXA CENTRAL) -->
     <section class="section-box" style="text-align:center;">
       <div style="font-size:2.2rem; font-weight:800; color:var(--primary);">
-        SIGLA-DO-PROJETO
+        <span id="inicioSigla">SIGLA-DO-PROJETO</span>
       </div>
       <div style="font-size:1.1rem; color:var(--muted); margin-top:.3rem;">
-        Nome completo do projeto de pesquisa
+        <span id="inicioNomeProjeto">Nome completo do projeto de pesquisa</span>
       </div>
     </section>
 
-  <div style="margin-top:1.4rem; display:flex; gap:0.8rem; justify-content:center;">
-    <button class="btn-success" id="btnExportar">⬇ Exportar</button>
-    <label class="btn-secondary" style="cursor:pointer;">
-      ⬆ Importar
-      <input type="file" id="fileImportar" accept=".json" hidden>
-    </label>
-  </div>
-</section>
+    <div class="io-bar">
+      <label class="btn-success btn-rect" style="cursor:pointer;">
+        ⬆ Importar
+        <input type="file" id="fileImportar" accept=".json" hidden>
+      </label>
+
+      <button class="btn-danger btn-rect" id="btnExportar">⬇ Exportar</button>
+    </div>
 
     <!-- RELATÓRIOS -->
     <section class="section-box">
@@ -72,4 +75,4 @@
 
 </body>
 </html>
-<script src="../js/index.js"></script>
+<script src="../js/inicio.js"></script>

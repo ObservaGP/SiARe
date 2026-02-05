@@ -1,11 +1,24 @@
 <h1>SiARe</h1>
 <p class="subtitle">Sistema de Acompanhamento de Relatórios</p>
 
+<div class="sidebar-project" id="sidebarProject" hidden>
+  <div class="sigla" id="sidebarSigla">SIGLA</div>
+</div>
+
+<div class="sidebar-io">
+  <label class="btn-success btn-rect" style="cursor:pointer;">
+    ⬆ Importar
+    <input type="file" id="fileImportarSidebar" accept=".json" hidden>
+  </label>
+  <button class="btn-danger btn-rect" id="btnExportarSidebar">⬇ Exportar</button>
+</div>
+
 <nav>
   <ul>
     <li><a href="inicio.html" data-page="inicio">Início</a></li>
     <li><a href="relatorios.html" data-page="relatorios">Relatórios</a></li>
     <li><a href="atividades.html" data-page="atividades">Atividades</a></li>
+    <li><a href="soft-skills.html" data-page="soft-skills">Soft Skills</a></li>
 
     <!-- Grupo colapsável: Administrativo -->
     <li class="nav-group" data-group="administrativo">
@@ -16,6 +29,8 @@
       <ul id="submenu-administrativo" class="submenu" hidden>
         <li><a href="equipe.html" data-page="equipe">Equipe Executora</a></li>
         <li><a href="administrativo.html" data-page="administrativo">Painel Administrativo</a></li>
+        <li><a href="emissao-relatorios.html" data-page="emissao-relatorios">Emissão de Relatórios</a></li>
+        <li><a href="emissao-declaracoes.html" data-page="emissao-declaracoes">Emissão de Declarações</a></li>
       </ul>
     </li>
   </ul>

@@ -33,20 +33,29 @@
 
   <div class="activities-table-wrap">
     <table class="activities-table" aria-label="Tabela de atividades e atribuições">
-      <thead>
+            <thead>
         <tr>
-          <th rowspan="2" class="col-num">Nº</th>
-          <th rowspan="2" class="col-atividade">
-            <div class="th-atividade">
-              <span>Atividade (Descrição)</span>
-              <div class="sort-controls" aria-label="Ordenação">
-                <button id="btnSortNumAsc" class="sort-btn" type="button" title="Ordenar 0–9" aria-label="Ordenar 0–9">0–9</button>
-                <button id="btnSortNumDesc" class="sort-btn" type="button" title="Ordenar 9–0" aria-label="Ordenar 9–0">9–0</button>
-                <button id="btnSortAZ" class="sort-btn" type="button" title="Ordenar A–Z" aria-label="Ordenar A–Z">A–Z</button>
-                <button id="btnSortZA" class="sort-btn" type="button" title="Ordenar Z–A" aria-label="Ordenar Z–A">Z–A</button>
-              </div>
+          <th rowspan="2" class="col-num">
+            <div class="th-sort-inline">
+              <span>Nº</span>
+              <button id="sortActNumToggle" class="sort-toggle" type="button" data-dir="asc" aria-label="Ordenar por Nº"></button>
             </div>
           </th>
+
+          <th rowspan="2" class="col-categoria">
+            <div class="th-sort-inline">
+              <span>Categoria</span>
+              <button id="sortActCatToggle" class="sort-toggle" type="button" data-dir="asc" aria-label="Ordenar por Categoria"></button>
+            </div>
+          </th>
+
+          <th rowspan="2" class="col-atividade">
+            <div class="th-sort-inline">
+              <span>Atividade (Descrição)</span>
+              <button id="sortActTxtToggle" class="sort-toggle" type="button" data-dir="asc" aria-label="Ordenar por Atividade"></button>
+            </div>
+          </th>
+
           <th colspan="4" class="col-atribuicao">Atribuição</th>
           <th rowspan="2" class="col-acoes">Ações</th>
         </tr>
@@ -74,11 +83,15 @@
 
     <form id="activityForm">
       <div class="form-group" style="margin-top:.6rem;">
-        <label for="atividadeDescricao">Atividade (Descrição) *</label>
-        <input id="atividadeDescricao" type="text" placeholder="Ex.: Elaborar Relatório" required />
+        <label for="atividadeCategoria">Categoria *</label>
+        <input id="atividadeCategoria" type="text" placeholder="Ex.: Documentação" required />
       </div>
 
-      <div class="activity-roles">
+      <div class="form-group">
+        <label for="atividadeDescricao">Atividade (Descrição) *</label>
+        <textarea id="atividadeDescricao" rows="3" placeholder="Ex.: Elaborar Relatório" required></textarea>
+      </div>
+<div class="activity-roles">
         <div class="activity-roles-title">Atribuir às funções:</div>
 
         <label class="checkline"><input type="checkbox" id="role_coordenador" /> Coordenador</label>

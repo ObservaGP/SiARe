@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Soft Skills — SiARe</title>
+
+  <link rel="stylesheet" href="../css/layout.css" />
+  <script src="../js/sidebar.js" defer></script>
+  <script src="../js/soft-skills.js" defer></script>
+</head>
+
+<body class="with-sidebar-grid">
+
+  <aside id="sidebar"></aside>
+
+  <main class="page-main">
+
+    <header class="version-toolbar">
+      <div>
+        <div class="h2-like">Soft Skills</div>
+        <div class="version-label">Gestão e atribuição por estudante ativo</div>
+      </div>
+    </header>
+
+    <section class="section-box">
+
+      <div class="section-header">
+        <h3>Lista de Soft Skills</h3>
+        <button id="btnAddSoftSkill" class="btn-success btn-rect" type="button">➕ Adicionar Soft Skill</button>
+      </div>
+
+      <div class="softskills-wrap">
+        <table class="activities-table softskills-table" aria-label="Tabela de Soft Skills e atribuições">
+          <thead id="softHead"></thead>
+          <tbody id="softBody"></tbody>
+        </table>
+      </div>
+
+      <div id="softEmpty" class="empty-state hidden">
+        Nenhuma soft skill cadastrada ainda.
+      </div>
+
+    </section>
+
+    <!-- Modal: adicionar/editar -->
+    <div id="softModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="softTitle">
+      <div class="modal-box modal-box-wide">
+        <p id="softTitle" class="modal-title"></p>
+
+        <form id="softForm">
+          <div class="form-group" style="margin-top:.6rem;">
+            <label for="softCategoria">Categoria *</label>
+            <input id="softCategoria" type="text" placeholder="Ex.: Comunicação" required />
+          </div>
+
+          <div class="form-group" style="margin-top:1rem;">
+            <label for="softDescricao">Soft Skill *</label>
+            <textarea id="softDescricao" rows="3" placeholder="Ex.: Comunicação assertiva" required></textarea>
+          </div>
+
+          <div class="form-footer-info" style="margin-top:.9rem;">
+            <div>*Campos obrigatórios</div>
+            <div id="softInfo" class="right" aria-live="polite"></div>
+          </div>
+
+          <div class="modal-actions" style="justify-content:flex-end;">
+            <button id="btnSoftCancel" class="btn-danger" type="button">Cancelar</button>
+            <button id="btnSoftSave" class="btn-success" type="submit">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal: confirmar exclusão -->
+    <div id="softDeleteModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="softDeleteTitle">
+      <div class="modal-box">
+        <p id="softDeleteTitle" class="modal-title"></p>
+
+        <div class="modal-actions">
+          <button id="btnSoftDelNao" class="btn-secondary" type="button">Não</button>
+          <button id="btnSoftDelSim" class="btn-danger" type="button">Sim, excluir</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</body>
+</html>

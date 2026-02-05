@@ -1,57 +1,53 @@
 const STORAGE_KEY = 'siare_data';
-const SORT_KEY = 'siare_atividades_sort'; // 'asc' | 'desc' | 'num_asc' | 'num_desc' | 'none'
+const SORT_KEY = 'siare_atividades_sort_page'; // 'num_asc'|'num_desc'|'cat_asc'|'cat_desc'|'txt_asc'|'txt_desc'|'none'
 
 document.addEventListener('DOMContentLoaded', () => {
   const btnAdd = document.getElementById('btnAddAtividade');
-  const btnSortNumAsc = document.getElementById('btnSortNumAsc');
-  const btnSortNumDesc = document.getElementById('btnSortNumDesc');
-  const btnSortAZ = document.getElementById('btnSortAZ');
-  const btnSortZA = document.getElementById('btnSortZA');
+
+  const sortNumToggle = document.getElementById('sortActNumToggle');
+  const sortCatToggle = document.getElementById('sortActCatToggle');
+  const sortTxtToggle = document.getElementById('sortActTxtToggle');
 
   const tbody = document.getElementById('activitiesBody');
   const empty = document.getElementById('activitiesEmpty');
 
-  const activityModal = document.getElementById('activityModal');
-  const activityTitle = document.getElementById('activityTitle');
-  const activityForm = document.getElementById('activityForm');
-  const atividadeDescricao = document.getElementById('atividadeDescricao');
-  const activityInfo = document.getElementById('activityInfo');
-  const btnActCancel = document.getElementById('btnActCancel');
+  const modal = document.getElementById('activityModal');
+  const title = document.getElementById('activityTitle');
+  const form = document.getElementById('activityForm');
+  const inpCat = document.getElementById('atividadeCategoria');
+  const inpDesc = document.getElementById('atividadeDescricao');
+  const info = document.getElementById('activityInfo');
+  const btnCancel = document.getElementById('btnActCancel');
 
   const chkCoord = document.getElementById('role_coordenador');
   const chkPesq = document.getElementById('role_pesquisador');
   const chkPesqEst = document.getElementById('role_pesquisador_estudante');
   const chkPesqExt = document.getElementById('role_pesquisador_externo');
 
-  const deleteModal = document.getElementById('deleteModal');
-  const deleteTitle = document.getElementById('deleteTitle');
+  const delModal = document.getElementById('deleteModal');
+  const delTitle = document.getElementById('deleteTitle');
   const btnDelNao = document.getElementById('btnDelNao');
   const btnDelSim = document.getElementById('btnDelSim');
 
-  if (!btnAdd || !tbody || !empty) {
-    console.error('[SiARe] Elementos da página Atividades não encontrados (btnAddAtividade/activitiesBody/activitiesEmpty).');
+  if (!btnAdd || !tbody || !empty || !form) {
+    console.error('[SiARe] atividades: elementos principais não encontrados.');
     return;
   }
 
   const collator = new Intl.Collator('pt-BR', { sensitivity: 'base', numeric: true });
 
   const roles = [
-    { key: 'coordenador', label: 'Coordenador', checkbox: chkCoord },
-    { key: 'pesquisador', label: 'Pesquisador', checkbox: chkPesq },
-    { key: 'pesquisador_estudante', label: 'Pesquisador Estudante', checkbox: chkPesqEst },
-    { key: 'pesquisador_externo', label: 'Pesquisador Externo', checkbox: chkPesqExt },
+    { key: 'coordenador', checkbox: chkCoord },
+    { key: 'pesquisador', checkbox: chkPesq },
+    { key: 'pesquisador_estudante', checkbox: chkPesqEst },
+    { key: 'pesquisador_externo', checkbox: chkPesqExt },
   ];
 
   let editingIndex = null;
   let pendingDeleteIndex = null;
 
   function getData() {
-    const raw = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
-      projeto: {},
-      equipe: [],
-      relatorios: {},
-      atividades: []
-    };
+    const raw = JSON.parse(localStorage.getItem(STORAGE_KEY)) || { projeto: {}, equipe: [], relatorios: {}, atividades: [] };
     if (!Array.isArray(raw.atividades)) raw.atividades = [];
     return raw;
   }
@@ -61,61 +57,32 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function makeId(prefix = 'act') {
-    return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,8)}`;
+    return `${prefix}_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
   }
 
-  function ensureActivityIds(data) {
+  function ensureSeq(data) {
     let changed = false;
-    data.atividades.forEach((a) => {
-      if (!a.id) { a.id = makeId('act'); changed = true; }
-    });
-    if (changed) saveData(data);
-  }
+    let max = 0;
 
-  function ensureActivitySeq(data) {
-    // "Nº" fixo: um seq atribuído uma única vez por registro
-    let changed = false;
-
-    let maxSeq = 0;
-    data.atividades.forEach((a) => {
+    data.atividades.forEach(a => {
       const n = Number(a.seq);
-      if (Number.isFinite(n) && n > maxSeq) maxSeq = n;
+      if (Number.isFinite(n) && n > max) max = n;
     });
 
-    data.atividades.forEach((a) => {
+    data.atividades.forEach(a => {
       const n = Number(a.seq);
       if (!Number.isFinite(n) || n <= 0) {
-        maxSeq += 1;
-        a.seq = maxSeq;
+        max += 1;
+        a.seq = max;
+        changed = true;
+      }
+      if (!a.id) {
+        a.id = makeId('act');
         changed = true;
       }
     });
 
     if (changed) saveData(data);
-  }
-
-  function getSortPref() {
-    const v = String(localStorage.getItem(SORT_KEY) || 'none');
-    return (v === 'asc' || v === 'desc' || v === 'num_asc' || v === 'num_desc') ? v : 'none';
-  }
-
-  function setSortPref(v) {
-    const val = (v === 'asc' || v === 'desc' || v === 'num_asc' || v === 'num_desc') ? v : 'none';
-    localStorage.setItem(SORT_KEY, val);
-  }
-
-  function updateSortButtons() {
-    const pref = getSortPref();
-    btnSortNumAsc?.classList.toggle('is-active', pref === 'num_asc');
-    btnSortNumDesc?.classList.toggle('is-active', pref === 'num_desc');
-    btnSortAZ?.classList.toggle('is-active', pref === 'asc');
-    btnSortZA?.classList.toggle('is-active', pref === 'desc');
-
-    if (btnSortNumAsc) btnSortNumAsc.title = (pref === 'num_asc') ? 'Remover ordenação (0–9)' : 'Ordenar 0–9';
-    if (btnSortNumDesc) btnSortNumDesc.title = (pref === 'num_desc') ? 'Remover ordenação (9–0)' : 'Ordenar 9–0';
-
-    if (btnSortAZ) btnSortAZ.title = (pref === 'asc') ? 'Remover ordenação (A–Z)' : 'Ordenar A–Z';
-    if (btnSortZA) btnSortZA.title = (pref === 'desc') ? 'Remover ordenação (Z–A)' : 'Ordenar Z–A';
   }
 
   function escapeHtml(str) {
@@ -127,157 +94,154 @@ document.addEventListener('DOMContentLoaded', () => {
       .replaceAll("'", '&#039;');
   }
 
-  function setInfo(texto, erro = false) {
-    if (!activityInfo) return;
-    activityInfo.textContent = texto;
-    activityInfo.style.color = erro ? '#b00020' : '#1f2933';
+  function setInfo(msg = '', danger = false) {
+    if (!info) return;
+    info.textContent = msg;
+    info.style.color = danger ? 'var(--danger)' : 'var(--muted)';
   }
 
-  function abrirModalAdicionar() {
+  function getSortPref() {
+    const v = String(localStorage.getItem(SORT_KEY) || 'none');
+    return ['num_asc','num_desc','cat_asc','cat_desc','txt_asc','txt_desc','none'].includes(v) ? v : 'none';
+  }
+
+  function setSortPref(v) {
+    const val = ['num_asc','num_desc','cat_asc','cat_desc','txt_asc','txt_desc','none'].includes(v) ? v : 'none';
+    localStorage.setItem(SORT_KEY, val);
+  }
+
+  function updateSortButtons() {
+    const pref = getSortPref();
+
+    function apply(btn, active, desc) {
+      if (!btn) return;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('data-dir', desc ? 'desc' : 'asc');
+    }
+
+    apply(sortNumToggle, pref === 'num_asc' || pref === 'num_desc', pref === 'num_desc');
+    apply(sortCatToggle, pref === 'cat_asc' || pref === 'cat_desc', pref === 'cat_desc');
+    apply(sortTxtToggle, pref === 'txt_asc' || pref === 'txt_desc', pref === 'txt_desc');
+  }
+
+  function openAdd() {
     editingIndex = null;
-    if (activityTitle) activityTitle.textContent = 'Adicionar Atividade';
-    if (atividadeDescricao) atividadeDescricao.value = '';
+    if (title) title.textContent = 'Adicionar Atividade';
+    if (inpCat) inpCat.value = '';
+    if (inpDesc) inpDesc.value = '';
     roles.forEach(r => { if (r.checkbox) r.checkbox.checked = false; });
     setInfo('');
-    activityModal?.classList.remove('hidden');
-    atividadeDescricao?.focus();
+    modal?.classList.remove('hidden');
+    inpCat?.focus();
   }
 
-  function abrirModalEditar(idx) {
+  function openEdit(idx) {
     const data = getData();
     const item = data.atividades[idx];
     if (!item) return;
 
     editingIndex = idx;
-    if (activityTitle) activityTitle.textContent = 'Editar Atividade';
-    if (atividadeDescricao) atividadeDescricao.value = item.descricao || '';
-
+    if (title) title.textContent = 'Editar Atividade';
+    if (inpCat) inpCat.value = item.categoria || '';
+    if (inpDesc) inpDesc.value = item.descricao || '';
     roles.forEach(r => {
       if (!r.checkbox) return;
       r.checkbox.checked = !!(item.atribuicao && item.atribuicao[r.key]);
     });
-
     setInfo('');
-    activityModal?.classList.remove('hidden');
-    atividadeDescricao?.focus();
+    modal?.classList.remove('hidden');
+    inpCat?.focus();
   }
 
-  function fecharModalAtividade() {
-    activityModal?.classList.add('hidden');
+  function closeModal() {
+    modal?.classList.add('hidden');
     editingIndex = null;
   }
 
-  function abrirDeleteModal(descricao, idx) {
+  function openDelete(desc, idx) {
     pendingDeleteIndex = idx;
-    if (deleteTitle) deleteTitle.innerHTML = `Deseja excluir a atividade <strong>${escapeHtml(descricao)}</strong>?`;
-    deleteModal?.classList.remove('hidden');
+    if (delTitle) delTitle.innerHTML = `Deseja excluir a atividade <strong>${escapeHtml(desc)}</strong>?`;
+    delModal?.classList.remove('hidden');
   }
 
-  function fecharDeleteModal() {
+  function closeDelete() {
     pendingDeleteIndex = null;
-    deleteModal?.classList.add('hidden');
+    delModal?.classList.add('hidden');
   }
 
-  btnAdd.addEventListener('click', () => abrirModalAdicionar());
+  btnAdd.addEventListener('click', openAdd);
+  btnCancel?.addEventListener('click', (e) => { e.preventDefault(); closeModal(); });
 
-  // Ordenação: A–Z / Z–A (persistente e refletida em outras telas)
-  btnSortNumAsc?.addEventListener('click', () => {
-    const pref = getSortPref();
-    setSortPref(pref === 'num_asc' ? 'none' : 'num_asc');
-    render();
-  });
-
-  btnSortNumDesc?.addEventListener('click', () => {
-    const pref = getSortPref();
-    setSortPref(pref === 'num_desc' ? 'none' : 'num_desc');
-    render();
-  });
-
-  btnSortAZ?.addEventListener('click', () => {
-    const pref = getSortPref();
-    setSortPref(pref === 'asc' ? 'none' : 'asc');
-    render();
-  });
-
-  btnSortZA?.addEventListener('click', () => {
-    const pref = getSortPref();
-    setSortPref(pref === 'desc' ? 'none' : 'desc');
-    render();
-  });
-
-  btnActCancel?.addEventListener('click', (e) => {
-    e.preventDefault();
-    fecharModalAtividade();
-  });
-
-  btnDelNao?.addEventListener('click', (e) => {
-    e.preventDefault();
-    fecharDeleteModal();
-  });
-
+  btnDelNao?.addEventListener('click', (e) => { e.preventDefault(); closeDelete(); });
   btnDelSim?.addEventListener('click', (e) => {
     e.preventDefault();
     if (pendingDeleteIndex === null) return;
-
     const data = getData();
-    if (pendingDeleteIndex < 0 || pendingDeleteIndex >= data.atividades.length) {
-      fecharDeleteModal();
-      return;
-    }
-
+    if (pendingDeleteIndex < 0 || pendingDeleteIndex >= data.atividades.length) return closeDelete();
     data.atividades.splice(pendingDeleteIndex, 1);
     saveData(data);
-
-    fecharDeleteModal();
+    closeDelete();
     render();
   });
 
-  activityForm?.addEventListener('submit', (e) => {
+  function toggleSort(kind) {
+    const pref = getSortPref();
+    let next = 'none';
+
+    if (kind === 'num') {
+      if (pref === 'num_desc') next = 'num_asc';
+      else next = 'num_desc';
+    } else if (kind === 'cat') {
+      if (pref === 'cat_desc') next = 'cat_asc';
+      else next = 'cat_desc';
+    } else {
+      if (pref === 'txt_desc') next = 'txt_asc';
+      else next = 'txt_desc';
+    }
+
+    setSortPref(next);
+    render();
+  }
+
+  sortNumToggle?.addEventListener('click', () => toggleSort('num'));
+  sortCatToggle?.addEventListener('click', () => toggleSort('cat'));
+  sortTxtToggle?.addEventListener('click', () => toggleSort('txt'));
+
+  form.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const desc = (atividadeDescricao?.value || '').trim();
-    if (!desc) {
+    const cat = (inpCat?.value || '').trim();
+    const desc = (inpDesc?.value || '').trim();
+    if (!cat || !desc) {
       setInfo('PREENCHA OS CAMPOS OBRIGATÓRIOS', true);
       return;
     }
 
     const atribuicao = {};
-    roles.forEach(r => {
-      atribuicao[r.key] = !!(r.checkbox && r.checkbox.checked);
-    });
+    roles.forEach(r => { atribuicao[r.key] = !!(r.checkbox && r.checkbox.checked); });
 
     const data = getData();
-    ensureActivityIds(data);
-    ensureActivitySeq(data);
+    ensureSeq(data);
 
     const existing = (editingIndex !== null && data.atividades[editingIndex]) ? data.atividades[editingIndex] : null;
-
     const novo = {
       id: existing?.id || makeId('act'),
-      seq: existing?.seq, // mantém o "Nº" fixo
+      seq: existing?.seq, // preserva seq do registro
+      categoria: cat,
       descricao: desc,
       atribuicao
     };
 
     if (editingIndex !== null) {
       data.atividades[editingIndex] = novo;
-      saveData(data);
-      fecharModalAtividade();
-      render();
-      return;
+    } else {
+      const maxSeq = Math.max(0, ...data.atividades.map(a => Number(a.seq) || 0));
+      novo.seq = maxSeq + 1;
+      data.atividades.push(novo);
     }
 
-    // novo registro: próximo seq
-    let maxSeq = 0;
-    data.atividades.forEach((a) => {
-      const n = Number(a.seq);
-      if (Number.isFinite(n) && n > maxSeq) maxSeq = n;
-    });
-    novo.seq = maxSeq + 1;
-
-    data.atividades.push(novo);
     saveData(data);
-    fecharModalAtividade();
+    closeModal();
     render();
   });
 
@@ -285,17 +249,14 @@ document.addEventListener('DOMContentLoaded', () => {
   tbody.addEventListener('click', (e) => {
     const btn = e.target.closest('button[data-action]');
     if (!btn) return;
-
     const action = btn.dataset.action;
     const index = Number(btn.dataset.index);
     if (!Number.isInteger(index)) return;
-
     const data = getData();
     const item = data.atividades?.[index];
     if (!item) return;
-
-    if (action === 'edit') abrirModalEditar(index);
-    if (action === 'delete') abrirDeleteModal(item.descricao || 'esta atividade', index);
+    if (action === 'edit') openEdit(index);
+    if (action === 'delete') openDelete(item.descricao || 'esta atividade', index);
   });
 
   // Delegação: checkboxes
@@ -303,65 +264,67 @@ document.addEventListener('DOMContentLoaded', () => {
     const chk = e.target;
     if (!(chk instanceof HTMLInputElement)) return;
     if (chk.type !== 'checkbox') return;
-
     const index = Number(chk.dataset.index);
     const roleKey = chk.dataset.role;
     if (!Number.isInteger(index) || !roleKey) return;
-
     const data = getData();
     const item = data.atividades?.[index];
     if (!item) return;
-
     if (!item.atribuicao || typeof item.atribuicao !== 'object') item.atribuicao = {};
     item.atribuicao[roleKey] = chk.checked;
-
-    data.atividades[index] = item;
     saveData(data);
   });
 
   function render() {
     const data = getData();
-    ensureActivityIds(data);
-    ensureActivitySeq(data);
+    ensureSeq(data);
     updateSortButtons();
 
-    const atividades = data.atividades || [];
+    const list = data.atividades || [];
     tbody.innerHTML = '';
 
-    if (!atividades.length) {
+    if (!list.length) {
       empty.classList.remove('hidden');
       return;
     }
     empty.classList.add('hidden');
 
-    // Para ordenar sem quebrar edição/checkboxes: guardamos o índice original
-    const display = atividades.map((a, idx) => ({ a, idx }));
-
+    const display = list.map((a, idx) => ({ a, idx }));
     const pref = getSortPref();
-    if (pref === 'asc' || pref === 'desc') {
+
+    if (pref === 'num_asc' || pref === 'num_desc') {
+      display.sort((x, y) => {
+        const sx = Number(x.a?.seq) || 0;
+        const sy = Number(y.a?.seq) || 0;
+        if (sx !== sy) return pref === 'num_asc' ? (sx - sy) : (sy - sx);
+        return collator.compare(String(x.a?.descricao || ''), String(y.a?.descricao || ''));
+      });
+    }
+
+    if (pref === 'cat_asc' || pref === 'cat_desc') {
+      display.sort((x, y) => {
+        const ax = String(x.a?.categoria || '');
+        const ay = String(y.a?.categoria || '');
+        const c = collator.compare(ax, ay);
+        if (c !== 0) return pref === 'cat_asc' ? c : -c;
+        return collator.compare(String(x.a?.descricao || ''), String(y.a?.descricao || ''));
+      });
+    }
+
+    if (pref === 'txt_asc' || pref === 'txt_desc') {
       display.sort((x, y) => {
         const ax = String(x.a?.descricao || '');
         const ay = String(y.a?.descricao || '');
         const c = collator.compare(ax, ay);
-        if (c !== 0) return pref === 'asc' ? c : -c;
-        const sx = Number(x.a?.seq) || 0;
-        const sy = Number(y.a?.seq) || 0;
-        return sx - sy;
-      });
-    } else if (pref === 'num_asc' || pref === 'num_desc') {
-      display.sort((x, y) => {
-        const sx = Number(x.a?.seq) || 0;
-        const sy = Number(y.a?.seq) || 0;
-        if (sx !== sy) return (pref === 'num_asc') ? (sx - sy) : (sy - sx);
-        const ax = String(x.a?.descricao || '');
-        const ay = String(y.a?.descricao || '');
-        return collator.compare(ax, ay);
+        if (c !== 0) return pref === 'txt_asc' ? c : -c;
+        return collator.compare(String(x.a?.categoria || ''), String(y.a?.categoria || ''));
       });
     }
 
-    display.forEach(({ a, idx }) => {
+    display.forEach(({ a, idx }, pos) => {
       const tr = document.createElement('tr');
       const desc = escapeHtml(a.descricao || '');
+      const cat = escapeHtml(a.categoria || '');
 
       const checks = roles.map(r => {
         const checked = !!(a.atribuicao && a.atribuicao[r.key]);
@@ -372,11 +335,9 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
       }).join('');
 
-      const seq = Number(a.seq);
-      const numCell = Number.isFinite(seq) && seq > 0 ? String(seq) : String(idx + 1);
-
       tr.innerHTML = `
-        <td class="col-num">${escapeHtml(numCell)}</td>
+        <td class="col-num">${escapeHtml(String(pos + 1))}</td>
+        <td class="col-categoria">${cat}</td>
         <td class="col-atividade">${desc}</td>
         ${checks}
         <td class="col-acoes">
@@ -390,6 +351,14 @@ document.addEventListener('DOMContentLoaded', () => {
       tbody.appendChild(tr);
     });
   }
+
+  // Escape fecha modais
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeModal();
+      closeDelete();
+    }
+  });
 
   render();
 });

@@ -1,6 +1,6 @@
 const STORAGE_KEY = 'siare_data';
 const UI_KEY = 'siare_reports_ui';
-const SORT_KEY = 'siare_atividades_sort'; // 'asc' | 'desc' | 'num_asc' | 'num_desc' | 'none'
+  const SORT_KEY = 'siare_atividades_sort'; // 'txt_asc' | 'txt_desc' | 'num_asc' | 'num_desc' | 'none'
 
 document.addEventListener('DOMContentLoaded', () => {
   // ======= Elementos (Atribuição) =======
@@ -16,13 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnNextAssignMonth = document.getElementById('btnNextAssignMonth');
   const assignMonthLabel = document.getElementById('assignMonthLabel');
 
-  // Ordenação da lista de atividades (Atribuição)
-  const btnAssignSortNumAsc = document.getElementById('btnAssignSortNumAsc');
-  const btnAssignSortNumDesc = document.getElementById('btnAssignSortNumDesc');
-  const btnAssignSortAZ = document.getElementById('btnAssignSortAZ');
-  const btnAssignSortZA = document.getElementById('btnAssignSortZA');
-
-  // ======= Elementos (Mês – seletor) =======
+  // Ordenação da lista de atividades (Atribuição) — botão único (toggle)
+  const sortNumToggle = document.getElementById('sortNumToggle');
+  const sortTxtToggle = document.getElementById('sortTxtToggle');
+// ======= Elementos (Mês – seletor) =======
   const monthsWrap = document.getElementById('reportsMonthsSelect');
   const btnPrevYear = document.getElementById('btnPrevYear');
   const btnNextYear = document.getElementById('btnNextYear');
@@ -190,25 +187,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function getSortPref() {
     const v = String(localStorage.getItem(SORT_KEY) || 'none');
-    return (v === 'asc' || v === 'desc' || v === 'num_asc' || v === 'num_desc') ? v : 'none';
+    return (v === 'txt_asc' || v === 'txt_desc' || v === 'num_asc' || v === 'num_desc') ? v : 'none';
   }
 
   function setSortPref(v) {
-    const val = (v === 'asc' || v === 'desc' || v === 'num_asc' || v === 'num_desc') ? v : 'none';
+    const val = (v === 'txt_asc' || v === 'txt_desc' || v === 'num_asc' || v === 'num_desc') ? v : 'none';
     localStorage.setItem(SORT_KEY, val);
   }
 
+  // Atualiza estado visual dos botões únicos (Nº e Atividade)
   function updateAssignSortButtons() {
     const pref = getSortPref();
-    btnAssignSortNumAsc?.classList.toggle('is-active', pref === 'num_asc');
-    btnAssignSortNumDesc?.classList.toggle('is-active', pref === 'num_desc');
-    btnAssignSortAZ?.classList.toggle('is-active', pref === 'asc');
-    btnAssignSortZA?.classList.toggle('is-active', pref === 'desc');
 
-    if (btnAssignSortNumAsc) btnAssignSortNumAsc.title = (pref === 'num_asc') ? 'Remover ordenação (0–9)' : 'Ordenar 0–9';
-    if (btnAssignSortNumDesc) btnAssignSortNumDesc.title = (pref === 'num_desc') ? 'Remover ordenação (9–0)' : 'Ordenar 9–0';
-    if (btnAssignSortAZ) btnAssignSortAZ.title = (pref === 'asc') ? 'Remover ordenação (A–Z)' : 'Ordenar A–Z';
-    if (btnAssignSortZA) btnAssignSortZA.title = (pref === 'desc') ? 'Remover ordenação (Z–A)' : 'Ordenar Z–A';
+    if (sortNumToggle) {
+      const active = pref === 'num_asc' || pref === 'num_desc';
+      sortNumToggle.classList.toggle('active', active);
+      sortNumToggle.setAttribute('data-dir', pref === 'num_desc' ? 'desc' : 'asc');
+    }
+
+    if (sortTxtToggle) {
+      const active = pref === 'txt_asc' || pref === 'txt_desc';
+      sortTxtToggle.classList.toggle('active', active);
+      sortTxtToggle.setAttribute('data-dir', pref === 'txt_desc' ? 'desc' : 'asc');
+    }
   }
 
   function sortActivitiesByPref(list) {
@@ -226,11 +227,11 @@ document.addEventListener('DOMContentLoaded', () => {
         return collator.compare(ax, ay);
       }
 
-      // pref textual: asc/desc
+      // pref textual: txt_asc/txt_desc
       const ax = String(a?.descricao || '');
       const ay = String(b?.descricao || '');
       const c = collator.compare(ax, ay);
-      if (c !== 0) return (pref === 'asc') ? c : -c;
+      if (c !== 0) return (pref === 'txt_asc') ? c : -c;
       return sx - sy;
     });
   }
@@ -582,18 +583,26 @@ function getMemberKey(m) {
     renderPanel(data);
   });
 
-  // Ordenação da lista (Atribuição de Atividades)
-  function applyAssignSort(mode) {
+  // Ordenação da lista (Atribuição de Atividades) — botão único por coluna
+  function applyAssignSortToggle(kind) {
     const pref = getSortPref();
-    setSortPref(pref === mode ? 'none' : mode);
+    let next;
+
+    if (kind === 'num') {
+      if (pref === 'num_desc') next = 'num_asc';
+      else next = 'num_desc'; // primeiro clique ativa 9–0 (desc)
+    } else {
+      if (pref === 'txt_desc') next = 'txt_asc';
+      else next = 'txt_desc'; // primeiro clique ativa Z–A (desc)
+    }
+
+    setSortPref(next);
     const data = getData();
     renderAssignList(data);
   }
 
-  btnAssignSortNumAsc?.addEventListener('click', () => applyAssignSort('num_asc'));
-  btnAssignSortNumDesc?.addEventListener('click', () => applyAssignSort('num_desc'));
-  btnAssignSortAZ?.addEventListener('click', () => applyAssignSort('asc'));
-  btnAssignSortZA?.addEventListener('click', () => applyAssignSort('desc'));
+  sortNumToggle?.addEventListener('click', () => applyAssignSortToggle('num'));
+  sortTxtToggle?.addEventListener('click', () => applyAssignSortToggle('txt'));
 
   // checkbox na lista de atribuição
   assignWrap.addEventListener('change', (e) => {

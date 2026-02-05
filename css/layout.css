@@ -165,12 +165,86 @@ main,
    Containers
    ====================== */
 .section-box {
-  width: min(980px, 96vw);
+  /* Aumentado para acomodar cabeçalhos com botões e colunas dinâmicas */
+  width: min(1080px, 96vw);
   background: #ffffff;
   border-radius: var(--radius);
   padding: 1.3rem 1.4rem;
   border: 2px solid var(--primary);
   box-shadow: var(--shadow);
+}
+
+/* ======================
+   Botões retangulares (para Importar/Exportar)
+   ====================== */
+.btn-rect {
+  border-radius: 10px !important;
+  padding: 0.5rem 1.05rem;
+}
+
+.io-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 1.4rem;
+}
+
+/* Sidebar: sigla do projeto em destaque */
+.sidebar-project {
+  margin-top: 0.6rem;
+  margin-bottom: 0.9rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid rgba(255,255,255,0.35);
+  border-radius: 12px;
+  background: rgba(255,255,255,0.10);
+}
+
+.sidebar-project .sigla {
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.sidebar-io {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  margin-top: 0.7rem;
+  margin-bottom: 1.1rem;
+}
+
+.sidebar-io .btn-success,
+.sidebar-io .btn-danger {
+  width: 100%;
+}
+
+/* Checklist (atribuição em modal) */
+.checklist{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .55rem .9rem;
+  margin-top: .4rem;
+}
+
+.checklist label{
+  display:flex;
+  align-items:center;
+  gap: .55rem;
+  font-size: .92rem;
+  color: var(--text);
+}
+
+/* Checklist inline (atribuição direto na tabela) */
+.checklist-inline{
+  display:flex;
+  flex-wrap:wrap;
+  gap: .4rem .75rem;
+  margin-top: 0;
+}
+
+.checklist-inline label{
+  font-size: .8rem;
+  white-space: nowrap;
 }
 
 /* ======================
@@ -181,6 +255,17 @@ main,
   grid-template-columns: 1fr 1fr;
   gap: 1.6rem;
   margin-top: 1.4rem;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.6rem;
+  margin-top: 1.4rem;
+}
+
+@media (max-width: 900px){
+  .grid-3{ grid-template-columns: 1fr; }
 }
 
 /* ======================
@@ -1368,3 +1453,158 @@ main,
 .small {
   font-size: 0.78rem;
 }
+
+
+/* ======================
+   Ordenação (↑↓ em quadradinhos)
+   ====================== */
+.th-sort{
+  display:flex;
+  align-items:flex-end;
+  justify-content: space-between;
+  gap: .6rem;
+}
+
+.assign-sorthead{
+  display:flex;
+  gap: 1.2rem;
+  align-items:flex-end;
+  margin: .55rem 0 .25rem;
+}
+
+.sort-col{
+  display:flex;
+  flex-direction: column;
+  gap: .25rem;
+}
+
+.sort-col-label{
+  font-size: .78rem;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.sort-stack{
+  display:inline-flex;
+  gap: .3rem;
+}
+
+.sort-square{
+  width: 28px;
+  height: 28px;
+  border-radius: 6px; /* cantos não muito arredondados */
+  border: 1px solid rgba(31, 111, 139, 0.28);
+  background: #ffffff;
+  cursor: pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-weight: 900;
+  line-height: 1;
+  user-select: none;
+}
+
+.sort-square:active{
+  transform: translateY(1px);
+}
+
+.sort-square.active,
+.sort-square.is-active{
+  background: rgba(31, 111, 139, 0.12);
+  border-color: rgba(31, 111, 139, 0.55);
+}
+
+/* Botão único de ordenação (toggle) */
+.sort-toggle{
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  border: 1px solid rgba(31, 111, 139, 0.28);
+  background: #ffffff;
+  cursor: pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  user-select: none;
+}
+
+.sort-toggle::before{
+  content: "↓";
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--primary);
+}
+
+.sort-toggle[data-dir="desc"]::before{
+  content: "↑";
+}
+
+.sort-toggle:active{ transform: translateY(1px); }
+
+.sort-toggle.active{
+  background: rgba(31, 111, 139, 0.12);
+  border-color: rgba(31, 111, 139, 0.55);
+}
+
+.th-sort-inline{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:.6rem;
+}
+
+/* Linha compacta de ordenação usada em Relatórios */
+.assign-sortline{
+  display:flex;
+  gap: 1.2rem;
+  align-items:center;
+  margin: .55rem 0 .25rem;
+}
+
+.assign-sortcell{
+  display:flex;
+  align-items:center;
+  gap: .55rem;
+}
+
+/* Alinha o cabeçalho "Nº" com a coluna numérica (abaixo do checkbox) */
+.assign-sortcell.col-num{
+  padding-left: 34px;
+}
+
+.assign-header-right{
+  display:flex;
+  flex-direction: column;
+  align-items:flex-end;
+  gap: .35rem;
+}
+
+.assign-sortlabel{
+  font-size: .78rem;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+/* Coluna categoria */
+.activities-table .col-categoria{
+  width: 180px;
+  max-width: 220px;
+}
+
+/* Soft Skills */
+.softskills-wrap{
+  overflow-x: auto;
+}
+
+.softskills-table{
+  min-width: 980px;
+}
+
+.softskills-table th.student-head{
+  font-size: .72rem;
+  font-weight: 700;
+  white-space: normal;
+  line-height: 1.05;
+}
+

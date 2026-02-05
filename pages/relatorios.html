@@ -29,7 +29,20 @@
       <div class="section-header">
         <div>
           <h3>Atribuição de Atividades</h3>
-          <div class="text-muted">Selecione um membro à esquerda e marque as atividades à direita</div>
+          <div class="text-muted">Selecione membro à esquerda e atividades à direita.</div>
+        </div>
+
+        <div class="assign-header-right">
+          <div id="assignTitle" class="text-muted">Atividades disponíveis para o perfil</div>
+
+          <div style="display:flex; gap:1rem; align-items:center;">
+            <div class="month-controls" aria-label="Mês da atribuição">
+              <button id="btnPrevAssignMonth" class="btn-icon btn-mini" type="button" aria-label="Mês anterior">◀</button>
+              <div id="assignMonthLabel" class="year-label year-pill">—</div>
+              <button id="btnNextAssignMonth" class="btn-icon btn-mini" type="button" aria-label="Próximo mês">▶</button>
+            </div>
+            <div id="assignCounter" class="reports-counter text-muted"></div>
+          </div>
         </div>
       </div>
 
@@ -45,31 +58,16 @@
 
         <!-- direita: atividades (atribuição ou mês) -->
         <div class="assign-right">
-          <div class="assign-right-head">
-            <div class="assign-head-left">
-              <div id="assignTitle" class="text-muted">Selecione um membro</div>
+          <div class="assign-sortline" aria-label="Ordenação da lista de atividades">
+            <div class="assign-sortcell col-num">
+              <span class="assign-sortlabel">Nº</span>
+              <button id="sortNumToggle" class="sort-toggle" type="button" data-dir="asc" aria-label="Ordenar Nº"></button>
             </div>
-
-            <div class="assign-head-right">
-              <div class="month-controls" aria-label="Mês da atribuição">
-                <button id="btnPrevAssignMonth" class="btn-icon btn-mini" type="button" aria-label="Mês anterior">◀</button>
-                <div id="assignMonthLabel" class="year-label year-pill">—</div>
-                <button id="btnNextAssignMonth" class="btn-icon btn-mini" type="button" aria-label="Próximo mês">▶</button>
-              </div>
-              <div id="assignCounter" class="reports-counter text-muted"></div>
+            <div class="assign-sortcell">
+              <span class="assign-sortlabel">Atividade</span>
+              <button id="sortTxtToggle" class="sort-toggle" type="button" data-dir="asc" aria-label="Ordenar Atividade"></button>
             </div>
           </div>
-
-
-          <div class="assign-sortbar" aria-label="Ordenação da lista de atividades">
-            <div class="sort-controls">
-              <button id="btnAssignSortNumAsc" class="sort-btn" type="button" title="Ordenar 0–9" aria-label="Ordenar 0–9">0–9</button>
-              <button id="btnAssignSortNumDesc" class="sort-btn" type="button" title="Ordenar 9–0" aria-label="Ordenar 9–0">9–0</button>
-              <button id="btnAssignSortAZ" class="sort-btn" type="button" title="Ordenar A–Z" aria-label="Ordenar A–Z">A–Z</button>
-              <button id="btnAssignSortZA" class="sort-btn" type="button" title="Ordenar Z–A" aria-label="Ordenar Z–A">Z–A</button>
-            </div>
-          </div>
-
 
           <div id="reportsAssignTasks" class="panel-scroll assign-panel" aria-label="Lista de atividades"></div>
 

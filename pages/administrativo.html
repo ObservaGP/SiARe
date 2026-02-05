@@ -7,6 +7,7 @@
 
   <link rel="stylesheet" href="../css/layout.css" />
   <script src="../js/sidebar.js" defer></script>
+  <script src="../js/administrativo.js" defer></script>
 </head>
 
 <body class="with-sidebar-grid">
@@ -23,85 +24,117 @@
     </header>
 
     <!-- ================= DADOS DO PROJETO ================= -->
-    <section class="section-box">
+    <section class="section-box" id="projectBox">
       <h3>Dados do Projeto</h3>
 
-      <div class="grid-1">
-        <div class="form-group">
+      <div class="grid-2">
+        <div class="form-group" style="max-width:180px;">
           <label>Sigla do Projeto</label>
-          <input type="text" placeholder="Ex.: PROJETO26" />
+          <input id="projSigla" type="text" placeholder="Ex.: PROJETO26" />
         </div>
-
         <div class="form-group">
-          <label>Nome do Projeto</label>
-          <input type="text" placeholder="Nome completo do projeto de pesquisa" />
+          <label style="margin-top:.3rem;">Nome do Projeto</label>
+          <input id="projNome" type="text" placeholder="Nome completo do projeto de pesquisa" />
         </div>
       </div>
 
-      <div class="grid-2">
-        <div class="form-group">
+      <div class="grid-3">
+        <div class="form-group" style="max-width:140px;">
           <label>Código Fundação</label>
-          <input type="text" />
+          <input id="projCodFund" type="text" inputmode="numeric" maxlength="3" placeholder="123" />
         </div>
-
-        <div class="form-group">
+        <div class="form-group" style="max-width:260px;">
           <label>Nº do Processo</label>
-          <input type="text" />
+          <input id="projProcesso" type="text" placeholder="00000.000000/0000-00" />
+        </div>
+        <div class="form-group">
+          <label>D.O.U.</label>
+          <input id="projExtrato" type="text" placeholder="Ex.: DOU 01" />
         </div>
       </div>
 
       <div class="grid-2">
         <div class="form-group">
-          <label>Extrato de Convênio no DOU</label>
-          <input type="text" />
+          <label>Início de Vigência do Acordo de Parceria</label>
+          <input id="projVigIni" type="date" />
         </div>
-
         <div class="form-group">
-          <label>Vigência do Acordo de Parceria</label>
-          <div class="grid-2-inner">
-            <input type="date" />
-            <input type="date" />
-          </div>
+          <label>Término de Vigência do Acordo de Parceria</label>
+          <input id="projVigFim" type="date" />
         </div>
       </div>
     </section>
 
 <!-- ================= RELACIONAMENTOS ================= -->
-<section class="section-box">
+<section class="section-box" id="partnersBox">
   <div class="section-header">
     <h3>Relacionamentos</h3>
-    <button class="btn-success rounded-xl">➕ Adicionar Parceiro</button>
+    <button id="btnAddPartner" class="btn-success rounded-xl" type="button">➕ Adicionar Parceiro</button>
   </div>
 
   <p class="text-muted">
     Parceiros institucionais envolvidos no projeto
   </p>
 
-  <table class="data-table">
+  <div class="activities-table-wrap">
+  <table class="activities-table" aria-label="Tabela de parceiros">
     <thead>
       <tr>
         <th>Nome do Parceiro</th>
         <th style="width:220px;">CNPJ</th>
-        <th class="table-actions">Ações</th> <!-- 🔹 ÚLTIMA COLUNA -->
+        <th class="col-acoes">Ações</th>
       </tr>
     </thead>
 
-    <tbody>
-      <tr>
-        <td>Empresa Parceira Exemplo</td>
-        <td>00.000.000/0001-00</td>
-        
-        <!-- 🔹 AÇÕES NA ÚLTIMA COLUNA, ALINHADAS À DIREITA -->
-        <td class="cell-center table-actions">
-          <div class="actions-container">
-            <button class="btn-icon btn-warning">✏️</button>
-            <button class="btn-icon btn-danger">🗑️</button>
-          </div>
-        </td>
-      </tr>
-    </tbody>
+    <tbody id="partnersBody"></tbody>
   </table>
+  </div>
+
+  <div id="partnersEmpty" class="empty-state hidden">
+    Nenhum parceiro cadastrado ainda.
+  </div>
 </section>
+
+<!-- Modal: Parceiro (CRUD) -->
+<div id="partnerModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="partnerTitle">
+  <div class="modal-box modal-box-wide">
+    <p id="partnerTitle" class="modal-title"></p>
+
+    <form id="partnerForm">
+      <div class="form-group" style="margin-top:.6rem;">
+        <label for="partnerNome">Nome do Parceiro *</label>
+        <input id="partnerNome" type="text" placeholder="Ex.: Empresa XYZ" required />
+      </div>
+
+      <div class="form-group">
+        <label for="partnerCnpj">CNPJ *</label>
+        <input id="partnerCnpj" type="text" placeholder="00.000.000.0000-00" required />
+      </div>
+
+      <div class="form-footer-info" style="margin-top:.9rem;">
+        <div>*Campos obrigatórios</div>
+        <div id="partnerInfo" class="right" aria-live="polite"></div>
+      </div>
+
+      <div class="modal-actions" style="justify-content:flex-end;">
+        <button id="btnPartnerCancel" class="btn-danger" type="button">Cancelar</button>
+        <button id="btnPartnerSave" class="btn-success" type="submit">Salvar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Modal: confirmar exclusão parceiro -->
+<div id="partnerDeleteModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="partnerDeleteTitle">
+  <div class="modal-box">
+    <p id="partnerDeleteTitle" class="modal-title"></p>
+
+    <div class="modal-actions">
+      <button id="btnPartnerDelNao" class="btn-secondary" type="button">Não</button>
+      <button id="btnPartnerDelSim" class="btn-danger" type="button">Sim, excluir</button>
+    </div>
+  </div>
+</div>
 
     <!-- ================= CHAVE ================= -->
     <section class="section-box">
